@@ -6,16 +6,19 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.upi.masakin.R
 import com.upi.masakin.adapters.ListRecipeAdapter
+import com.upi.masakin.data.database.MasakinDatabase
 import com.upi.masakin.databinding.FragmentHomeBinding
 import com.upi.masakin.databinding.ItemChefBinding
-import com.upi.masakin.model.Chef
+import com.upi.masakin.data.entities.Chef
 import com.upi.masakin.model.Recipe
 import com.upi.masakin.model.RecipeData
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -32,32 +35,36 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    @Suppress("DEPRECATION")
+    @Override
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
 
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
 
         list.addAll(getListRecipe())
         showRecyclerList()
 
-        val chefList = listOf(
-            Chef("Chef A", R.drawable.img_chef1),
-            Chef("Chef B", R.drawable.img_chef2),
-            Chef("Chef C", R.drawable.img_chef3),
-            Chef("Chef D", R.drawable.img_chef4)
-        )
+        val database = MasakinDatabase.getDatabase(requireContext())
+        val chefDao = database.ChefDao()
 
-        for (chef in chefList) {
-            val chefItemBinding = ItemChefBinding.inflate(
-                LayoutInflater.from(context),
-                binding.lChef,
-                false
-            )
-            chefItemBinding.imgItemPhoto.setImageResource(chef.image)
-            chefItemBinding.tvChefName.text = chef.name
-            binding.lChef.addView(chefItemBinding.root)
+        lifecycleScope.launch {
+            chefDao.insertChef(Chef(name = "Chef A", image = R.drawable.img_chef1))
+            chefDao.insertChef(Chef(name = "Chef B", image = R.drawable.img_chef2))
+            chefDao.insertChef(Chef(name = "Chef C", image = R.drawable.img_chef3))
+            chefDao.insertChef(Chef(name = "Chef D", image = R.drawable.img_chef4))
+
+            val chefs = chefDao.getAllChefs()
+
+            for (chef in chefs) {
+                val chefItemBinding = ItemChefBinding.inflate(
+                    LayoutInflater.from(context),
+                    binding.lChef,
+                    false
+                )
+                chefItemBinding.imgItemPhoto.setImageResource(chef.image)
+                chefItemBinding.tvChefName.text = chef.name
+                binding.lChef.addView(chefItemBinding.root)
+            }
         }
     }
 

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     alias(libs.plugins.navigation.safe.args)
+    id ("kotlin-kapt")
 }
 
 android {
@@ -44,29 +45,34 @@ android {
 
 dependencies {
     // Core Android Dependencies
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.coordinatorlayout)
+    implementation(libs.androidx.core.ktx)          // Core KTX
+    implementation(libs.androidx.appcompat)         // AppCompat
+    implementation(libs.material)                  // Material Design Components
+    implementation(libs.androidx.constraintlayout) // ConstraintLayout
+    implementation(libs.androidx.activity)         // Activity KTX
+    implementation(libs.androidx.coordinatorlayout) // CoordinatorLayout
 
     // Navigation Component
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.fragment) // Navigation Fragment
+    implementation(libs.androidx.navigation.ui)       // Navigation UI
 
     // UI Enhancements
-    implementation(libs.lottie) // Lottie animations
-    implementation(libs.glide) // Image loading
+    implementation(libs.lottie)  // Lottie for animations
+    implementation(libs.glide)   // Glide for image loading
 
     // JSON Parsing
-    implementation(libs.gson)
+    implementation(libs.gson) // GSON for JSON parsing
 
     // Annotation Processing
-    annotationProcessor(libs.compiler)
+    annotationProcessor(libs.compiler) // Glide Annotation Processor
 
-    // Testing
-    testImplementation(libs.junit) // Unit testing
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    // Room Database
+    implementation(libs.room) // Room Runtime
+    implementation(libs.ktx)  // Room KTX
+    kapt(libs.kapt)           // Room Annotation Processor
+
+    // Testing Dependencies
+    testImplementation(libs.junit)                   // Unit testing
+    androidTestImplementation(libs.androidx.junit)   // AndroidX JUnit
+    androidTestImplementation(libs.androidx.espresso.core) // Espresso
 }
