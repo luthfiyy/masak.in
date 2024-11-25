@@ -2,13 +2,12 @@ package com.upi.masakin.ui
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.upi.masakin.R
 import com.upi.masakin.databinding.ActivityMainBinding
-import com.upi.masakin.ui.fragment.FavoriteFragment
-import com.upi.masakin.ui.fragment.HomeFragment
-import com.upi.masakin.ui.fragment.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,38 +19,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    loadFragment(HomeFragment())
-                    true
-                }
-                R.id.nav_favorite -> {
-                    loadFragment(FavoriteFragment())
-                    true
-                }
-                R.id.nav_profile -> {
-                    loadFragment(ProfileFragment())
-                    true
-                }
-                else -> false
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        binding.bottomNavigation.setupWithNavController(navController)
+
+        setSupportActionBar(binding.toolbar)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.nav_home -> binding.appbar.visibility = View.VISIBLE
+                R.id.nav_article -> binding.appbar.visibility = View.GONE
+                R.id.nav_profile -> binding.appbar.visibility = View.GONE
             }
         }
 
-        setSupportActionBar(binding.toolbar)
-        if (savedInstanceState == null) {
-            binding.bottomNavigation.selectedItemId = R.id.nav_home
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
     }
 }

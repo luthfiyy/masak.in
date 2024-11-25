@@ -1,13 +1,43 @@
 <resources>
     <string name="app_name">masak.in</string>
 
-    <string name="like_recipe">Like Recipe</string>             
+    <string name="like_recipe">Like Recipe</string>
 
     <string name="list">List</string>
     <string name="grid">Grid</string>
     <string name="name">Nur Luthfiyah</string>
     <string name="email">luthfiy1304@gmail.com</string>
     <string name="greeting">Hi, Upi</string>
+    <string name="morning">Good morning!</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
+    <string name="share">Share</string>
+    <string name="bahan_bahan">Bahan-bahan</string>
+    <string name="time">10 menit</string>
+    <string name="name_chefs">Anna</string>
+    <string name="recipe">recipe</string>
+    <string name="back">back</string>
+    <string name="ingredients">INGREDIENTS</string>
+    <string name="steps">STEPS</string>
+    <string name="play_recipe_video">Play recipe video</string>
+    <string name="recent">Recent</string>
+    <string name="popular">Popular</string>
+    <string name="all">All</string>
+    <string name="see_all">See all</string>
+    <string name="categories">Categories</string>
+    <string name="best_chefs">Best chefs</string>
+    <string name="search">Try to find&#8230;</string>
+    <string name="no_favorite">No favorite recipes yet</string>
+    <string name="favorite_recipes">Favorite Recipes</string>
+    <string name="mobile_developer">Mobile Developer</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="cooking_time">Cooking Time</string>
+    <string name="serving">Serving</string>
+    <string name="cara_membuat">Cara Membuat</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="settings">Settings</string>
+    <string name="article">Article</string>
 
     <string-array name="data_title">
         <item>Lumpia Jamur</item>
@@ -35,54 +65,6 @@
         <item>Berbeda dengan resep semur lainnya, Semur Tahu Isi Ayam ala SAORI® ini pakai kecap ala Jepang bumbu teriyaki yang manis-gurihnya pas tanpa butuh tambahan garam sehingga jadi lebih sehat untuk dimakan. Uniknya tahu isi ayam yang dibumbui semur ciptakan pengalaman makan yang berbeda.</item>
     </string-array>
 
-    <integer-array name="data_image">
-        <item>@drawable/img_lumpia_jamur</item>
-        <item>@drawable/img_sup_tomat</item>
-        <item>@drawable/img_cakwe_udang</item>
-        <item>@drawable/img_nasi_goreng</item>
-        <item>@drawable/img_ayam_suwir</item>
-        <item>@drawable/img_spicy_keripik</item>
-        <item>@drawable/img_cabbage</item>
-        <item>@drawable/img_mie_bulgogi</item>
-        <item>@drawable/img_nugget</item>
-        <item>@drawable/img_semur_tahu</item>
-    </integer-array>
-
-    <string-array name="data_ingredients">
-        <item>4 siung bawang putih, cincang\n150 gr udang cincang\n10 buah jamur kuping, iris tipis\n150 gr wortel, iris tipis\n150 gr kubis, iris tipis\n50 ml air\n½ sdt lada putih\n1 sachet Masako® Kaldu Jamur\n12 lembar kulit lumpia\n750 ml minyak untuk menggoreng</item>
-
-        <item>2 siung bawang putih\n1 batang daun bawang\n3 buah tomat sedang\n1 buah tahu putih\n1 butir telur\n800 ml air\n1 sdt AJI-NO-MOTO®\n1½ sdt garam</item>
-
-        <item>5 buah cakwe\n250 gr ayam cincang\n150 gr udang\n2 butir putih telur\n1 sdm kecap asin\n1 sdm minyak wijen\n1 sdt garam\n1 sdm gula pasir\n2 sdt lada putih\n1 sdt AJI-NO-MOTO®\n3 sdm tepung sagu\n1½ sdm bawang goreng\n3 batang daun bawang\nMinyak secukupnya untuk menggoreng\nMayumi® Pedas</item>
-
-        <item>5 siung bawang merah\n3 siung bawang putih\n5 buah cabai rawit merah\n2 buah cabai merah keriting\n3 sdm minyak goreng\n1 bungkus AJINOMOTO® Terasi Udang\n½ sdt garam\n½ sdt Masako® Ayam\n2 butir telur\n300 gr nasi putih\n2 buah sosis sapi\nMinyak untuk menumis</item>
-
-        <item>250 gr dada ayam\n12 siung bawang merah\n12 buah cabai rawit merah\n3 batang serai\n8 lembar daun jeruk\n1 sdt AJI-NO-MOTO® Terasi Udang\n½ sdt gula\n8 sdm minyak kelapa\n2 sdm air perasan jeruk nipis\n1 sdt garam\n½ sdt AJI-NO-MOTO®</item>
-
-        <item>300 gr Daging slice\n6 siung Bawang merah\n3 siung Bawang putih\n1 sdt Ketumbar\n½ sdm Kecap inggris\n1 ruas jari Lengkuas\n½ sdm Gula merah\n½ sdt Baking powder\n½ sdt garam\n½ sdt lada putih\n2 butir Telur\n1 Bungkus Sajiku® Tepung Bumbu Serbaguna Pedas</item>
-
-        <item>1 buah sawi putih\n250 gr daging ayam cincang\n2 siung bawang putih, cincang\n1 batang daun bawang\n50 gr wortel, potong dadu\n1 gr jahe, parut\n1 sdm minyak wijen\n1½ sdt Masako® Light\nChilli oil</item>
-
-        <item>250 gr daging slice\n250 gr Mie Hokkien\n½ bawang bombay, iris\n2 siung bawang putih\n1 batang daun bawang\n1 sdt SAORI® Bulgogi\n1 sdt Wijen Sangrai\n30 gr wortel, iris</item>
-
-        <item>250 g daging ayam giling\n50 g jagung manis pipil\n200 g kentang rebus, haluskan\n3 sdm Sajiku® Ayam Goreng\n1 butir telur, kocok lepas\n3 sdm maizena\n1 butir telur, kocok lepas, untuk pelapis\n150 g tepung panir (orange)\nMinyak untuk menggoreng</item>
-
-        <item>1 L kaldu ayam\n4 sdm SAORI® Saus Teriyaki\n5 sdm gula merah, sisir\n6 buah tahu putih kecil, potong 2 persegi\n1 buah kentang, potong cantik\n1 buah wortel, potong cantik\n1 sdm daun bawang, untuk taburan\n\nIsian Tahu:\n100 g daging ayam cincang\n50 g wortel, cincang halus\n1 sdm tepung tapioka\n2 siung bawang putih, cincang halus\n1⁄2 sdt kaldu ayam bubuk\n2 sdm SAORI® Saus Teriyaki\n1 sdm minyak goreng\n50 ml air\n\nBumbu:\n6 butir bawang merah, haluskan\n3 butir kemiri, haluskan\n4 butir cengkeh\n5 cm kayu manis\n1 lembar daun salam\n2 siung bawang putih, haluskan\n1 cm jahe, iris\n½ sdt merica putih bubuk\n½ biji pala</item>
-    </string-array>
-
-    <string-array name="data_steps">
-        <item>1. Panaskan minyak lalu tumis bawang putih. Kemudian masukkan udang tumis dan sebentar lalu tambahkan jamur kuping, wortel, dan kubis. Aduk rata\n2.Tambahkan lada putih, Masako® Kaldu Jamur, dan air lalu aduk rata kembali, sisihkan.\n3. Siapkan kulit lumpia, beri isian lumpia lalu gulung dan rekatkan dengan air.\n4. Goreng lumpia hingga matang dan berwarna kecokelatan.\n5. Sajikan</item>
-        <item>1. Panaskan minyak kemudian tumis bawang putih, tomat, dan daun bawang hingga harum.\n2. Tambahkan air, AJI-NO-MOTO®, dan garam. Masak sampai tomat lunak\n3. Masukkan tahu, lalu masak kembali sampai mendidih.\n4. Tuang telur yang sudah dikocok lalu aduk perlahan.\n5. Sajikan.</item>
-        <item>1. Haluskan ayam, udang, putih telur, minyak wijen, kecap asin, garam, gula pasir, lada putih, AJI-NO-MOTO®, tepung sagu menggunakan blender. Setelah halus, masukkan bawang goreng dan daun bawang. Aduk menggunakan spatula.\n2. Potong-potong cakwe menjadi 3 bagian, gunting bagian tengahnya.\n3. Isi cakwe dengan adonan ayam udang.\n4. Panaskan minyak, goreng cakwe hingga matang.\n5. Sajikan dengan Mayumi® Pedas.</item>
-        <item>1. Masukkan bawang merah, bawang putih, cabai rawit merah, cabai merah keriting, dan minyak ke dalam blender. Haluskan.\n2. Di wajan yang panas, tambahkan minyak lalu tumis bumbu hingga harum dan matang serta tambahkan telur. Aduk hingga rata.\n3. Masukkan sosis lalu aduk rata. Kemudian, tambahkan nasi aduk hingga rata.\n4. Tambahkan garam, kaldu Masako® Ayam, dan Ajinomoto® Terasi Udang, aduk hingga rata.\n5. Sajikan.</item>
-        <item>1. Rebus dada ayam 5 - 10 menit hingga matang, lalu suwir dan sisihkan.\n2. Iris bawang merah, cabe rawit, sereh, dan daun jeruk.\n3. Campurkan bawang merah, cabe rawit, sereh dan daun jeruk. Tambahkan AJI-NO-MOTO®, garam, gula, terasi, dan perasan jeruk nipis.\n4. Panaskan minyak kelapa, tambahkan ke sambal matah, aduk rata.\n5. Campurkan ayam suwir dan sambal matah. Lalu aduk rata. Sajikan.</item>
-        <item>1. Masukan bawang merah, bawang putih, ketumbar, kecap inggris, lengkuas, gula merah, baking powder, garam, lada putih, dan telur lalu blender hingga halus.\n2. Potong daging slice yang masih sedikit membeku menjadi setengah dan tambahkan bumbu marinasi, marinasi selama 30 menit, sisihkan.\n3. Lumuri daging slice satu persatu dengan Sajiku® tepung bumbu serbaguna pedas.\n4. Panaskan minyak dan goreng daging hingga warna kecoklatan.\n5. Sajikan.</item>
-        <item>1. Potong sawi putih dari batang.\n2. Kukus sebentar satu persatu hingga layu angkat dan sisihkan.\n3. Di wadah kosong campurkan daging ayam cincang, bawang putih, daun bawang, wortel, jahe, minyam wijen dan Masako® Light. Aduk rata sampai semua tercampur.\n4.  Kukus cabbage dumpling sekitar 15 menit hingga matang.\n5. Sajikan dengan chilli oil.</item>
-        <item>1. Marinasi daging di wadah besar campurkan bawang bombay, bawang putih, daun bawang, SAORI® Bulgogi, wijen sangrai, wortel, dan daging slice lalu marinasi sekitar 10 menit, sisihkan.\n2. Panaskan wajan dengan minyak dan tumis daging bulgogi, tambakan mie yang sudah di rebus. Aduk rata.\n3. Tambahkan SAORI® Bulgogi dan air, aduk rata lalu masak hingga matang.\n4. Sajikan, garnish dengan daun bawang dan wijen sangrai.</item>
-        <item>1. Dalam wadah campur daging ayam, jagung manis, kentang, Sajiku® Ayam Goreng, telur, dan maizena. Aduk rata.\n2. Tuang dalam wadah atau loyang, kukus selama 15 menit. Angkat, keluarkan.\n3. Potong segitiga menggunakan pisau. Sisihkan.\n4. Lapisi dengan telur, gulingkan ke atas tepung panir.\n5. Goreng hingga berubah warna, angkat. Tiriskan.\n6. Hias dengan pelengkap. Sajikan nugget ayam jagung hangat.</item>
-        <item>1. Keruk tahu untuk tempat isi. Sisihkan sisa tahu.\n2. Isi: Dalam wadah campur daging, wortel, tepung tapioka, bawang putih, kaldu ayam, sisa tahu, dan SAORI® Saus Teriyaki. Aduk rata.\n3. Tuang isi ke dalam tahu, ratakan. Sisihkan.\n4. Tahu isi: Menggunakan wajan datar panaskan 2 sdm minyak goreng. Tata tahu dengan bagian daging di bawah. Masak dengan api sedang selama 2 menit. Tuang air, tutup. Masak selama 5 menit atau hingga air habis. Angkat. Sisihkan.\n5. Tumis bumbu hingga harum. Tambahkan kaldu, SAORI® Saus Teriyaki, dan gula merah. Aduk rata.\n6. Masukkan tahu, kentang, dan wortel. Masak hingga bumbu meresap. Angkat. Sajikan.</item>
-    </string-array>
-
     <string-array name="data_time">
         <item>15 Menit</item>
         <item>30 Menit</item>
@@ -108,4 +90,19 @@
         <item>4 Porsi</item>
         <item>4 Porsi</item>
     </string-array>
+
+    <string-array name="data_reviews">
+        <item>12k Reviews</item>
+        <item>10k Reviews</item>
+        <item>1k Reviews</item>
+        <item>1,5k Reviews</item>
+        <item>2k Reviews</item>
+        <item>4k Reviews</item>
+        <item>12k Reviews</item>
+        <item>6k Reviews</item>
+        <item>2.3k Reviews</item>
+        <item>11k Reviews</item>
+    </string-array>
+
+    <string name="read_time_format">%d min read</string>
 </resources>

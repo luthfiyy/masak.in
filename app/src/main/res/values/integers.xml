@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="data_image">
+        <item>@drawable/img_lumpia_jamur</item>
+        <item>@drawable/img_sup_tomat</item>
+        <item>@drawable/img_cakwe_udang</item>
+        <item>@drawable/img_nasi_goreng</item>
+        <item>@drawable/img_ayam_suwir</item>
+        <item>@drawable/img_spicy_keripik</item>
+        <item>@drawable/img_cabbage</item>
+        <item>@drawable/img_mie_bulgogi</item>
+        <item>@drawable/img_nugget</item>
+        <item>@drawable/img_semur_tahu</item>
+    </integer-array>
+</resources>

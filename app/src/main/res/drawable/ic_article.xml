@@ -1,0 +1,36 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Outline of Document -->
+    <path
+        android:strokeColor="@color/black"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M4,2h12l4,4v14a2,2 0,0 1,-2 2h-14a2,2 0,0 1,-2 -2v-16a2,2 0,0 1,2 -2z" />
+    <!-- Title Line -->
+    <path
+        android:strokeColor="@color/black"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M6,7h12" />
+    <!-- Line 1 -->
+    <path
+        android:strokeColor="@color/black"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M6,11h10" />
+    <!-- Line 2 -->
+    <path
+        android:strokeColor="@color/black"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M6,14h8" />
+    <!-- Line 3 -->
+    <path
+        android:strokeColor="@color/black"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M6,17h10" />
+</vector>

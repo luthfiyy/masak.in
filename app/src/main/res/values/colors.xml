@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="brown">#351304</color>
-    <color name="orange">#FF9F44</color>
-    <color name="lightOrange">#FFDCB9</color>
+
+    <!-- Primary brand colors -->
+    <color name="primary_pink">#FFABC8</color>
+
+    <!-- Secondary colors -->
+    <color name="secondary_orange_light">#FFDCB9</color>
+    <color name="secondary_blue_light">#A2E2F6</color>
+    <color name="background_cream">#FDF7F1</color>
+
+    <!-- Grey scale -->
+    <color name="grey_dark">#4D4D4D</color>
+    <color name="grey_medium">#808080</color>
+    <color name="grey_light">#CCCCCC</color>
+    <color name="grey_lightest">#F0F0F0</color>
+
+    <!-- Button states -->
+    <color name="button_active">@color/primary_pink</color>
+    <color name="button_inactive">@color/background_cream</color>
+    <color name="button_text_active">@color/black</color>
+    <color name="button_text_inactive">#757575</color>
+
+    <!-- Accent colors -->
+    <color name="accent_purple">#6750A3</color>
+    <color name="accent_green">#C39EFF8E</color>
+    <color name="transparent_black">#99000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="_99000000">#99000000</color>
 </resources>

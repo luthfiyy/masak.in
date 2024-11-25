@@ -1,7 +1,18 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Masakin" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="colorPrimary">@color/primary_pink</item>
+        <item name="colorPrimaryVariant">@color/secondary_orange_light</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">@color/background_cream</item>
+
+        <!-- Text colors -->
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorSecondary">@color/grey_medium</item>
     </style>
 </resources>

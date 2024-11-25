@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
-
+    alias(libs.plugins.navigation.safe.args)
 }
 
 android {
@@ -43,34 +43,30 @@ android {
 }
 
 dependencies {
-
+    // Core Android Dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.coordinatorlayout)
+
+    // Navigation Component
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+
+    // UI Enhancements
+    implementation(libs.lottie) // Lottie animations
+    implementation(libs.glide) // Image loading
+
+    // JSON Parsing
+    implementation(libs.gson)
+
+    // Annotation Processing
+    annotationProcessor(libs.compiler)
+
+    // Testing
+    testImplementation(libs.junit) // Unit testing
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation (libs.circleimageview)
-    implementation (libs.material.v190)
-    implementation (libs.androidx.coordinatorlayout)
-    implementation (libs.exoplayer.core)
-    implementation (libs.exoplayer.ui)
-
-    val nav_version = "2.8.0"
-
-    // Jetpack Compose integration
-    implementation("androidx.navigation:navigation-compose:$nav_version")
-
-    // Views/Fragments integration
-    implementation("androidx.navigation:navigation-fragment:$nav_version")
-    implementation("androidx.navigation:navigation-ui:$nav_version")
-
-    // Feature module support for Fragments
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
-
-    // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
-
 }

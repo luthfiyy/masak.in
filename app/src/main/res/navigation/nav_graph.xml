@@ -9,18 +9,57 @@
         android:id="@+id/nav_home"
         android:name="com.upi.masakin.ui.fragment.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@id/nav_recipe_detail"/>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_favorite"
-        android:name="com.upi.masakin.ui.fragment.FavoriteFragment"
+        android:name="com.upi.masakin.ui.fragment.favorite.FavoriteFragment"
         android:label="Favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite">
+
+        <action
+            android:id="@+id/actionFavoriteToDetail"
+            app:destination="@id/nav_recipe_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_article"
+        android:name="com.upi.masakin.ui.fragment.article.ArticleFragment"
+        android:label="Article List"
+        tools:layout="@layout/fragment_article">
+        <action
+            android:id="@+id/action_articleFragment_to_articleDetailFragment"
+            app:destination="@id/articleDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleDetailFragment"
+        android:name="com.upi.masakin.ui.fragment.article.ArticleDetailFragment"
+        android:label="Article Detail"
+        tools:layout="@layout/fragment_detail_article">
+        <argument
+            android:name="article"
+            app:argType="com.upi.masakin.model.Article" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.upi.masakin.ui.fragment.ProfileFragment"
+        android:name="com.upi.masakin.ui.fragment.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+
+    <activity
+        android:id="@+id/nav_recipe_detail"
+        android:label="Recipe Detail"
+        android:name="com.upi.masakin.ui.recipe.RecipeDetailActivity"
+        tools:layout="@layout/activity_recipe_detail">
+        <argument
+            android:name="recipe"
+            app:argType="com.upi.masakin.model.Recipe" />
+    </activity>
 
 </navigation>

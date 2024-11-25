@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:padding="8dp">
+
+    <!-- Step Number -->
+    <TextView
+        android:id="@+id/tv_step_number"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1" />
+
+    <!-- Connecting Line -->
+    <View
+        android:id="@+id/line_connector"
+        android:layout_width="2dp"
+        android:layout_height="20dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@id/tv_step_number"
+        app:layout_constraintStart_toStartOf="@id/tv_step_number"
+        app:layout_constraintTop_toBottomOf="@id/tv_step_number" />
+
+    <!-- Step Description -->
+    <TextView
+        android:id="@+id/tv_step_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line_connector"
+        tools:text="Sajikan" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
