@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_profile -> binding.appbar.visibility = View.GONE
             }
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

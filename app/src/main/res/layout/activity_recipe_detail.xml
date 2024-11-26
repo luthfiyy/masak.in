@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_cream"
-    tools:context=".ui.recipe.RecipeDetailActivity">
+    tools:context=".ui.view.recipe.RecipeDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"

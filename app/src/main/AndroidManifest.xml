@@ -20,7 +20,7 @@
             android:exported="false"/>
 
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.view.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Masakin.Splash">
             <intent-filter>
@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".ui.recipe.RecipeDetailActivity"
+            android:name=".ui.view.recipe.RecipeDetailActivity"
             android:exported="false"/>
     </application>
 </manifest>

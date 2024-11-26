@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.fragment
+package com.upi.masakin.ui.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,15 +17,18 @@ import com.upi.masakin.data.database.MasakinDatabase
 import com.upi.masakin.databinding.FragmentHomeBinding
 import com.upi.masakin.databinding.ItemChefBinding
 import com.upi.masakin.data.entities.Chef
+import com.upi.masakin.data.repository.RecipeRepository
 import com.upi.masakin.model.Recipe
 import com.upi.masakin.model.RecipeData
+import com.upi.masakin.ui.viewmodel.RecipeViewModel
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val list = ArrayList<Recipe>()
-
+    private lateinit var viewModel: RecipeViewModel
+    private lateinit var listRecipeAdapter: ListRecipeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +49,32 @@ class HomeFragment : Fragment() {
         showRecyclerList()
 
         val database = MasakinDatabase.getDatabase(requireContext())
-        val chefDao = database.ChefDao()
+        val chefDao = database.chefDao()
+
+        val repository = RecipeRepository(requireContext())
+
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(
+            this,
+            RecipeViewModel.RecipeViewModelFactory(repository)
+        )[RecipeViewModel::class.java]
+
+        // Setup RecyclerView
+        binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        // Initialize adapter
+        listRecipeAdapter = ListRecipeAdapter(ArrayList()) { recipe ->
+            val action = HomeFragmentDirections.actionHomeToDetail(recipe)
+            findNavController().navigate(action)
+        }
+        binding.rvRecipes.adapter = listRecipeAdapter
+
+        // Observe recipes
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.recipes.collect { recipes ->
+                listRecipeAdapter.updateRecipes(recipes)
+            }
+        }
 
         lifecycleScope.launch {
             chefDao.insertChef(Chef(name = "Chef A", image = R.drawable.img_chef1))
@@ -99,7 +128,7 @@ class HomeFragment : Fragment() {
         val listRecipe = ArrayList<Recipe>()
         for (i in dataName.indices) {
             val recipe = Recipe(
-                id,
+                id = i + 1, // Add a unique ID
                 dataName[i],
                 ingredients[i],
                 steps[i],
@@ -117,8 +146,8 @@ class HomeFragment : Fragment() {
 
     private fun showRecyclerList() {
         val listRecipeAdapter = ListRecipeAdapter(list) { recipe ->
-             val action = HomeFragmentDirections.actionHomeToDetail(recipe)
-             findNavController().navigate(action)
+            val action = HomeFragmentDirections.actionHomeToDetail(recipe)
+            findNavController().navigate(action)
         }
         binding.rvRecipes.adapter = listRecipeAdapter
     }

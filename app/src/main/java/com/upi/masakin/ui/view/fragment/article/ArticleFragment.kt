@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.fragment.article
+package com.upi.masakin.ui.view.fragment.article
 
 import ArticleAdapter
 import android.os.Bundle

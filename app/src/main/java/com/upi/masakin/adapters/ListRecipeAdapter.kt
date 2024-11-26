@@ -11,6 +11,19 @@ class ListRecipeAdapter(
     private val onItemClick: (Recipe) -> Unit
 ) : RecyclerView.Adapter<ListRecipeAdapter.ListViewHolder>() {
 
+    // Method to update the entire list
+    fun updateRecipes(newRecipes: List<Recipe>) {
+        listRecipe.clear()
+        listRecipe.addAll(newRecipes)
+        notifyDataSetChanged()
+    }
+
+    // Method to add a single recipe
+    fun addRecipe(recipe: Recipe) {
+        listRecipe.add(recipe)
+        notifyItemInserted(listRecipe.size - 1)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding = ItemRowRecipeBinding.inflate(
             LayoutInflater.from(parent.context),

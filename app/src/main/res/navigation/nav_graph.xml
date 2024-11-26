@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.upi.masakin.ui.fragment.HomeFragment"
+        android:name="com.upi.masakin.ui.view.fragment.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/nav_favorite"
-        android:name="com.upi.masakin.ui.fragment.favorite.FavoriteFragment"
+        android:name="com.upi.masakin.ui.view.fragment.favorite.FavoriteFragment"
         android:label="Favorite"
         tools:layout="@layout/fragment_favorite">
 
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/nav_article"
-        android:name="com.upi.masakin.ui.fragment.article.ArticleFragment"
+        android:name="com.upi.masakin.ui.view.fragment.article.ArticleFragment"
         android:label="Article List"
         tools:layout="@layout/fragment_article">
         <action
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/articleDetailFragment"
-        android:name="com.upi.masakin.ui.fragment.article.ArticleDetailFragment"
+        android:name="com.upi.masakin.ui.view.fragment.article.ArticleDetailFragment"
         android:label="Article Detail"
         tools:layout="@layout/fragment_detail_article">
         <argument
@@ -48,14 +48,14 @@
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.upi.masakin.ui.fragment.profile.ProfileFragment"
+        android:name="com.upi.masakin.ui.view.fragment.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
     <activity
         android:id="@+id/nav_recipe_detail"
         android:label="Recipe Detail"
-        android:name="com.upi.masakin.ui.recipe.RecipeDetailActivity"
+        android:name="com.upi.masakin.ui.view.recipe.RecipeDetailActivity"
         tools:layout="@layout/activity_recipe_detail">
         <argument
             android:name="recipe"

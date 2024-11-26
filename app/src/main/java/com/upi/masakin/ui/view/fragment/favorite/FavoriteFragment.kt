@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.fragment.favorite
+package com.upi.masakin.ui.view.fragment.favorite
 
 import android.os.Bundle
 import android.view.View
@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken // Tambahkan ini
-import java.lang.reflect.Type // Tambahkan ini
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 import com.upi.masakin.R
 import com.upi.masakin.adapters.ListRecipeAdapter
 import com.upi.masakin.databinding.FragmentFavoriteBinding

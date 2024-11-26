@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.recipe
+package com.upi.masakin.ui.view.recipe
 
 import android.content.Intent
 import android.os.Build
@@ -30,8 +30,6 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var btnSteps: Button
     private lateinit var ingredientsSection: LinearLayout
     private lateinit var stepsAdapter: RecipeStepsAdapter
-
-
     private lateinit var binding: ActivityRecipeDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

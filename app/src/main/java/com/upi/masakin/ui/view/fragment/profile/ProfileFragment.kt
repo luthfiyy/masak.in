@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.fragment.profile
+package com.upi.masakin.ui.view.fragment.profile
 
 import androidx.fragment.app.Fragment
 import com.upi.masakin.R

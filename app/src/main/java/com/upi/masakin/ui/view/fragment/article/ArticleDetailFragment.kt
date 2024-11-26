@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.fragment.article
+package com.upi.masakin.ui.view.fragment.article
 
 import android.os.Bundle
 import android.view.LayoutInflater

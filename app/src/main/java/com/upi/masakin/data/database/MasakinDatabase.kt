@@ -4,11 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.upi.masakin.data.dao.ChefDao
+import com.upi.masakin.data.dao.RecipeDao
 import com.upi.masakin.data.entities.Chef
+import com.upi.masakin.data.entities.RecipeEntity
+import com.upi.masakin.utils.RecipeConverters
 
-@Database(entities = [Chef::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Chef::class, RecipeEntity::class],
+    version = 2,
+    exportSchema = false
+)
+@TypeConverters(RecipeConverters::class)
 abstract class MasakinDatabase : RoomDatabase() {
-    abstract fun ChefDao(): ChefDao
+    abstract fun chefDao(): ChefDao
+    abstract fun recipeDao(): RecipeDao
 
     companion object {
         @Volatile
@@ -20,7 +31,9 @@ abstract class MasakinDatabase : RoomDatabase() {
                     context.applicationContext,
                     MasakinDatabase::class.java,
                     "masakin_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()  // Handles schema changes (careful in production)
+                    .build()
                 INSTANCE = instance
                 instance
             }

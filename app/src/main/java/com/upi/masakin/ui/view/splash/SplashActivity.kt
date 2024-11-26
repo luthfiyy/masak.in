@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.splash
+package com.upi.masakin.ui.view.splash
 
 import android.content.Intent
 import android.os.Bundle

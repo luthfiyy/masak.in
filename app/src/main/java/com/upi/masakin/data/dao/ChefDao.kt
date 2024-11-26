@@ -1,4 +1,4 @@
-package com.upi.masakin.data.database
+package com.upi.masakin.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
