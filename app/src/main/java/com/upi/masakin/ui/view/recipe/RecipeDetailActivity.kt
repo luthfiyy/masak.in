@@ -32,6 +32,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var stepsAdapter: RecipeStepsAdapter
     private lateinit var binding: ActivityRecipeDetailBinding
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecipeDetailBinding.inflate(layoutInflater)

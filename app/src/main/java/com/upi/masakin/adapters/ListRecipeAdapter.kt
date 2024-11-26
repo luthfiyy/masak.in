@@ -2,6 +2,7 @@ package com.upi.masakin.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.upi.masakin.databinding.ItemRowRecipeBinding
 import com.upi.masakin.model.Recipe
@@ -13,15 +14,11 @@ class ListRecipeAdapter(
 
     // Method to update the entire list
     fun updateRecipes(newRecipes: List<Recipe>) {
+        val diffCallback = RecipeDiffCallback(listRecipe, newRecipes)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         listRecipe.clear()
         listRecipe.addAll(newRecipes)
-        notifyDataSetChanged()
-    }
-
-    // Method to add a single recipe
-    fun addRecipe(recipe: Recipe) {
-        listRecipe.add(recipe)
-        notifyItemInserted(listRecipe.size - 1)
+        diffResult.dispatchUpdatesTo(this)  // 'this' is your adapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -51,4 +48,26 @@ class ListRecipeAdapter(
 
     class ListViewHolder(val binding: ItemRowRecipeBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    class RecipeDiffCallback(
+        private val oldList: List<Recipe>,
+        private val newList: List<Recipe>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            // Compare by unique identifier (e.g., id)
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            // Compare the contents of the items
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
 }
+
+

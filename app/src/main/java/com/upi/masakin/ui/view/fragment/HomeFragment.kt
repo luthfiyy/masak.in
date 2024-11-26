@@ -21,6 +21,7 @@ import com.upi.masakin.data.repository.RecipeRepository
 import com.upi.masakin.model.Recipe
 import com.upi.masakin.model.RecipeData
 import com.upi.masakin.ui.viewmodel.RecipeViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -51,13 +52,11 @@ class HomeFragment : Fragment() {
         val database = MasakinDatabase.getDatabase(requireContext())
         val chefDao = database.chefDao()
 
-        val repository = RecipeRepository(requireContext())
-
-        // Initialize ViewModel
         viewModel = ViewModelProvider(
             this,
-            RecipeViewModel.RecipeViewModelFactory(repository)
+            RecipeViewModel.RecipeViewModelFactory(RecipeRepository(requireContext(), Dispatchers.IO))
         )[RecipeViewModel::class.java]
+
 
         // Setup RecyclerView
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
