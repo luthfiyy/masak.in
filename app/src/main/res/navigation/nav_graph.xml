@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_home_to_detail"
             app:destination="@id/nav_recipe_detail"/>
+        <action
+            android:id="@+id/action_home_to_chefDetail"
+            app:destination="@id/chef_detail"/>
     </fragment>
 
     <fragment
@@ -59,7 +62,17 @@
         tools:layout="@layout/activity_recipe_detail">
         <argument
             android:name="recipe"
-            app:argType="com.upi.masakin.model.Recipe" />
+            app:argType="com.upi.masakin.data.entities.RecipeEntity" />
+    </activity>
+
+
+    <activity
+        android:id="@+id/chef_detail"
+        android:name="com.upi.masakin.ui.view.chef.ChefDetailActivity"
+        tools:layout="@layout/activity_chef_detail">
+        <argument
+            android:name="chef"
+            app:argType="com.upi.masakin.data.entities.Chef"/>
     </activity>
 
 </navigation>

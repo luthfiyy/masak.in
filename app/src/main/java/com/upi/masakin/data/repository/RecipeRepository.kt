@@ -4,8 +4,7 @@ import android.content.Context
 import com.upi.masakin.R
 import com.upi.masakin.data.database.MasakinDatabase
 import com.upi.masakin.data.entities.RecipeEntity
-import com.upi.masakin.model.Recipe
-import com.upi.masakin.model.RecipeData
+import com.upi.masakin.data.entities.RecipeData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -34,6 +33,7 @@ class RecipeRepository(
         val serving = context.resources.getStringArray(R.array.data_serving)
         val reviews = context.resources.getStringArray(R.array.data_reviews)
         val dataPhoto = context.resources.obtainTypedArray(R.array.data_image)
+        val chefId = context.resources.getIntArray(R.array.data_chefId)
 
         val listRecipe = ArrayList<RecipeEntity>()
         for (i in dataName.indices) {
@@ -45,7 +45,8 @@ class RecipeRepository(
                 time = time[i],
                 serving = serving[i],
                 reviews = reviews[i],
-                image = dataPhoto.getResourceId(i, -1)
+                image = dataPhoto.getResourceId(i, -1),
+                chefId = chefId[i]
             )
             listRecipe.add(recipe)
         }
@@ -54,9 +55,9 @@ class RecipeRepository(
     }
 
     // Get all recipes from database
-    suspend fun getAllRecipes(): List<Recipe> = withContext(ioDispatcher) {
+    suspend fun getAllRecipes(): List<RecipeEntity> = withContext(ioDispatcher) {
         recipeDao.getAllRecipesSync().map { recipeEntity ->
-            Recipe(
+            RecipeEntity(
                 id = recipeEntity.id,
                 title = recipeEntity.title,
                 ingredients = recipeEntity.ingredients,
@@ -65,7 +66,8 @@ class RecipeRepository(
                 time = recipeEntity.time,
                 serving = recipeEntity.serving,
                 reviews = recipeEntity.reviews,
-                image = recipeEntity.image
+                image = recipeEntity.image,
+                chefId = recipeEntity.chefId
             )
         }
     }

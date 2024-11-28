@@ -1,6 +1,5 @@
 package com.upi.masakin.ui.view.fragment.article
 
-import ArticleAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.upi.masakin.adapters.ArticleAdapter
 import com.upi.masakin.databinding.FragmentArticleBinding
 import com.upi.masakin.model.Article
 import com.upi.masakin.model.sampleArtikels

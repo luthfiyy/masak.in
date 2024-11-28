@@ -11,8 +11,8 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import com.upi.masakin.R
 import com.upi.masakin.adapters.ListRecipeAdapter
+import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.FragmentFavoriteBinding
-import com.upi.masakin.model.Recipe
 
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private var _binding: FragmentFavoriteBinding? = null
@@ -32,8 +32,8 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         val gson = Gson()
 
         val existingData = sharedPrefs.getString("favorite_recipes", "[]")
-        val type = getType<List<Recipe>>()
-        val favoriteRecipes: List<Recipe> = gson.fromJson(existingData, type) ?: listOf()
+        val type = getType<List<RecipeEntity>>()
+        val favoriteRecipes: List<RecipeEntity> = gson.fromJson(existingData, type) ?: listOf()
 
         if (favoriteRecipes.isEmpty()) {
             binding.apply {
@@ -56,7 +56,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         return object : TypeToken<T>() {}.type
     }
 
-    private fun setupRecyclerView(recipes: List<Recipe>) {
+    private fun setupRecyclerView(recipes: List<RecipeEntity>) {
         recipeAdapter = ListRecipeAdapter(ArrayList(recipes)) { recipe ->
             navigateToRecipeDetail(recipe)
         }
@@ -73,7 +73,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         _binding = null
     }
 
-    private fun navigateToRecipeDetail(recipe: Recipe) {
+    private fun navigateToRecipeDetail(recipe: RecipeEntity) {
         val action = FavoriteFragmentDirections.actionFavoriteToDetail(recipe)
         findNavController().navigate(action)
     }

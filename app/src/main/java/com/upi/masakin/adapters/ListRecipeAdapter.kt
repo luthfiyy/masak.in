@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ItemRowRecipeBinding
-import com.upi.masakin.model.Recipe
 
-class ListRecipeAdapter(
-    private val listRecipe: ArrayList<Recipe>,
-    private val onItemClick: (Recipe) -> Unit
+class  ListRecipeAdapter(
+    private val listRecipe: ArrayList<RecipeEntity>,
+    private val onItemClick: (RecipeEntity) -> Unit
 ) : RecyclerView.Adapter<ListRecipeAdapter.ListViewHolder>() {
 
     // Method to update the entire list
-    fun updateRecipes(newRecipes: List<Recipe>) {
+    fun updateRecipes(newRecipes: List<RecipeEntity>) {
         val diffCallback = RecipeDiffCallback(listRecipe, newRecipes)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         listRecipe.clear()
@@ -50,8 +50,8 @@ class ListRecipeAdapter(
         RecyclerView.ViewHolder(binding.root)
 
     class RecipeDiffCallback(
-        private val oldList: List<Recipe>,
-        private val newList: List<Recipe>
+        private val oldList: List<RecipeEntity>,
+        private val newList: List<RecipeEntity>
     ) : DiffUtil.Callback() {
 
         override fun getOldListSize(): Int = oldList.size

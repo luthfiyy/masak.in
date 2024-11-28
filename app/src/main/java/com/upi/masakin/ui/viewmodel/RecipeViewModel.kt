@@ -3,16 +3,16 @@ package com.upi.masakin.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.data.repository.RecipeRepository
-import com.upi.masakin.model.Recipe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
-    private val _recipes = MutableStateFlow<List<Recipe>>(emptyList())
-    val recipes: StateFlow<List<Recipe>> = _recipes.asStateFlow()
+    private val _recipes = MutableStateFlow<List<RecipeEntity>>(emptyList())
+    val recipes: StateFlow<List<RecipeEntity>> = _recipes.asStateFlow()
 
     init {
         loadRecipes()

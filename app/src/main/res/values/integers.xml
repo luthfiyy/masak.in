@@ -12,4 +12,17 @@
         <item>@drawable/img_nugget</item>
         <item>@drawable/img_semur_tahu</item>
     </integer-array>
+
+    <integer-array name="data_chefId">
+        <item>1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>1</item>
+        <item>1</item>
+        <item>4</item>
+        <item>1</item>
+        <item>3</item>
+        <item>3</item>
+    </integer-array>
 </resources>

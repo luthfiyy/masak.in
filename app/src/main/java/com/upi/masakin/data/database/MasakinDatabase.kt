@@ -13,7 +13,7 @@ import com.upi.masakin.utils.RecipeConverters
 
 @Database(
     entities = [Chef::class, RecipeEntity::class],
-    version = 2,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(RecipeConverters::class)
@@ -32,7 +32,7 @@ abstract class MasakinDatabase : RoomDatabase() {
                     MasakinDatabase::class.java,
                     "masakin_database"
                 )
-                    .fallbackToDestructiveMigration()  // Handles schema changes (careful in production)
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance
@@ -40,3 +40,4 @@ abstract class MasakinDatabase : RoomDatabase() {
         }
     }
 }
+

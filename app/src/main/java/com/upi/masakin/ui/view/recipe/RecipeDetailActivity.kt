@@ -17,8 +17,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.upi.masakin.R
 import com.upi.masakin.adapters.RecipeStepsAdapter
+import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ActivityRecipeDetailBinding
-import com.upi.masakin.model.Recipe
 
 class RecipeDetailActivity : AppCompatActivity() {
     private var recipeTitle: String? = null
@@ -120,13 +120,13 @@ class RecipeDetailActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setupLikeButton(recipe: Recipe) {
+    private fun setupLikeButton(recipe: RecipeEntity) {
         val sharedPrefs = getSharedPreferences("FavoriteRecipes", MODE_PRIVATE)
         val gson = Gson()
 
         val favoritesJson = sharedPrefs.getString("favorite_recipes", "[]")
-        val type = object : TypeToken<ArrayList<Recipe>>() {}.type
-        val favoriteList = gson.fromJson<ArrayList<Recipe>>(favoritesJson, type) ?: ArrayList()
+        val type = object : TypeToken<ArrayList<RecipeEntity>>() {}.type
+        val favoriteList = gson.fromJson<ArrayList<RecipeEntity>>(favoritesJson, type) ?: ArrayList()
 
         isLiked = favoriteList.any { it.id == recipe.id }
         updateLikeButtonState()

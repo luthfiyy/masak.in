@@ -105,4 +105,5 @@
     </string-array>
 
     <string name="read_time_format">%d min read</string>
+    <string name="chef_recipes">Chef\'s Recipes</string>
 </resources>
