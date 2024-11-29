@@ -13,5 +13,4 @@ class ChefRepository(context: Context) {
             chefDao.insertChef(chef)
         }
     }
-
 }

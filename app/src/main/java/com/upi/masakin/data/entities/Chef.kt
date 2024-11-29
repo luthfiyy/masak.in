@@ -14,7 +14,3 @@ data class Chef(
     val description: String,
     val image: Int
 ) : Parcelable
-
-
-
-

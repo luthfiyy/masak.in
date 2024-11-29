@@ -19,9 +19,7 @@ class ArticleFragment : Fragment() {
     private lateinit var articleAdapter: ArticleAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentArticleBinding.inflate(inflater, container, false)
         return binding.root

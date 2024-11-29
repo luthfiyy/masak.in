@@ -9,13 +9,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class RecipeRepository(
-    private val context: Context,
-    private val ioDispatcher: CoroutineDispatcher
+    private val context: Context, private val ioDispatcher: CoroutineDispatcher
 ) {
     private val database = MasakinDatabase.getDatabase(context)
     private val recipeDao = database.recipeDao()
 
-    // Initial data population method
     suspend fun populateInitialRecipes() = withContext(ioDispatcher) {
         if (recipeDao.getRecipeCount() == 0) {
             val recipes = getInitialRecipes()
@@ -23,7 +21,6 @@ class RecipeRepository(
         }
     }
 
-    // Convert Recipe to RecipeEntity for database storage
     private fun getInitialRecipes(): List<RecipeEntity> {
         val dataName = context.resources.getStringArray(R.array.data_title)
         val ingredients = RecipeData.getIngredientsList()
@@ -56,7 +53,6 @@ class RecipeRepository(
         return listRecipe
     }
 
-    // Get all recipes from database
     suspend fun getAllRecipes(): List<RecipeEntity> = withContext(ioDispatcher) {
         recipeDao.getAllRecipesSync().map { recipeEntity ->
             RecipeEntity(

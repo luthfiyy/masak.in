@@ -6,10 +6,8 @@ import com.upi.masakin.data.entities.Chef
 import com.upi.masakin.data.entities.RecipeEntity
 
 data class ChefWithRecipes(
-    @Embedded val chef: Chef,
-    @Relation(
-        parentColumn = "id", // Primary Key di Chef
-        entityColumn = "chefId" // Foreign Key di RecipeEntity
-    )
-    val recipes: List<RecipeEntity> // Daftar Resep yang dibuat Chef
+    @Embedded val chef: Chef, @Relation(
+        parentColumn = "id",
+        entityColumn = "chefId"
+    ) val recipes: List<RecipeEntity>
 )

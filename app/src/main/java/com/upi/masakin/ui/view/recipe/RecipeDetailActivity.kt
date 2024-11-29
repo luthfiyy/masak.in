@@ -3,13 +3,11 @@ package com.upi.masakin.ui.view.recipe
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -51,7 +49,6 @@ class RecipeDetailActivity : AppCompatActivity() {
         val args by navArgs<RecipeDetailActivityArgs>()
         val recipe = args.recipe
 
-
         btnIngredients = binding.btnIngredients
         btnSteps = binding.btnSteps
         ingredientsSection = binding.ingredientsSection
@@ -91,44 +88,28 @@ class RecipeDetailActivity : AppCompatActivity() {
         lifecycle.addObserver(youtubePlayerView)
 
         binding.btnPlay.setOnClickListener {
-            val youtubePlayerView = binding.youtubePlayerView
-
             if (!isVideoPlaying) {
-                // Show the YouTube player and start playing
-                youtubePlayerView.visibility = View.VISIBLE
+                binding.youtubePlayerView.visibility = View.VISIBLE
+                youTubePlayer?.play()
                 isVideoPlaying = true
-
-                // Change button to stop icon
                 binding.btnPlay.setImageResource(R.drawable.ic_stop)
-
-                youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        // Store the player reference
-                        this@RecipeDetailActivity.youTubePlayer = youTubePlayer
-
-                        try {
-                            val videoId = recipe.videoId
-                            youTubePlayer.loadVideo(videoId, 0f)
-                        } catch (e: Exception) {
-                            Log.e("YouTubePlayer", "Error loading video", e)
-                            Toast.makeText(this@RecipeDetailActivity, "Could not load video", Toast.LENGTH_SHORT).show()
-                            resetVideoState()
-                        }
-                    }
-                })
             } else {
-                // Stop the video and hide the player
-                resetVideoState()
+                youTubePlayer?.pause()
+                binding.youtubePlayerView.visibility = View.GONE
+                isVideoPlaying = false
+                binding.btnPlay.setImageResource(R.drawable.ic_play)
             }
         }
-        showBahanContent()
-    }
 
-    private fun resetVideoState() {
-        youTubePlayer?.pause()
-        binding.youtubePlayerView.visibility = View.GONE
-        binding.btnPlay.setImageResource(R.drawable.ic_play)
-        isVideoPlaying = false
+        binding.youtubePlayerView.addYouTubePlayerListener(object :
+            AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                this@RecipeDetailActivity.youTubePlayer = youTubePlayer
+                val videoId = recipe.videoId
+                youTubePlayer.cueVideo(videoId, 0f)
+            }
+        })
+        showBahanContent()
     }
 
     private fun showBahanContent() {
@@ -137,14 +118,12 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         btnIngredients.setBackgroundTintList(
             ContextCompat.getColorStateList(
-                this,
-                R.color.button_active
+                this, R.color.button_active
             )
         )
         btnSteps.setBackgroundTintList(
             ContextCompat.getColorStateList(
-                this,
-                R.color.button_inactive
+                this, R.color.button_inactive
             )
         )
 
@@ -158,8 +137,7 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         btnIngredients.setBackgroundTintList(
             ContextCompat.getColorStateList(
-                this,
-                R.color.button_inactive
+                this, R.color.button_inactive
             )
         )
         btnSteps.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_active))
@@ -175,7 +153,8 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         val favoritesJson = sharedPrefs.getString("favorite_recipes", "[]")
         val type = object : TypeToken<ArrayList<RecipeEntity>>() {}.type
-        val favoriteList = gson.fromJson<ArrayList<RecipeEntity>>(favoritesJson, type) ?: ArrayList()
+        val favoriteList =
+            gson.fromJson<ArrayList<RecipeEntity>>(favoritesJson, type) ?: ArrayList()
 
         isLiked = favoriteList.any { it.id == recipe.id }
         updateLikeButtonState()
@@ -196,6 +175,7 @@ class RecipeDetailActivity : AppCompatActivity() {
             updateLikeButtonState()
         }
     }
+
     private fun updateLikeButtonState() {
         val iconResource = if (isLiked) {
             R.drawable.ic_favorite
@@ -254,4 +234,15 @@ class RecipeDetailActivity : AppCompatActivity() {
             background = ContextCompat.getDrawable(this@RecipeDetailActivity, R.drawable.bg_rounded)
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        youTubePlayer?.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        youTubePlayer = null
+    }
+
 }

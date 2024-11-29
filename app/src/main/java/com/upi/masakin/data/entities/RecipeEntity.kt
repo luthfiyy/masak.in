@@ -8,8 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "recipes_table")
 data class RecipeEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val ingredients: List<String>,
     val steps: List<String>,
@@ -40,8 +39,7 @@ object RecipeData {
                 "• 1 sachet Masako® Kaldu Jamur",
                 "• 12 lembar kulit lumpia",
                 "• 750 ml minyak untuk menggoreng"
-            ),
-            listOf(
+            ), listOf(
                 "• 2 siung bawang putih",
                 DAUN_BAWANG,
                 "• 3 buah tomat sedang",
@@ -50,8 +48,7 @@ object RecipeData {
                 "• 800 ml air",
                 "• 1 sdt AJI-NO-MOTO®",
                 "• 1½ sdt garam"
-            ),
-            listOf(
+            ), listOf(
                 "• 5 buah cakwe",
                 "• 250 gr ayam cincang",
                 "• 150 gr udang",
@@ -66,8 +63,7 @@ object RecipeData {
                 "• 3 batang daun bawang",
                 "• Minyak secukupnya untuk menggoreng",
                 "• Mayumi® Pedas"
-            ),
-            listOf(
+            ), listOf(
                 "• 5 siung bawang merah",
                 "• 3 siung bawang putih",
                 "• 5 buah cabai rawit merah",
@@ -80,8 +76,7 @@ object RecipeData {
                 "• 300 gr nasi putih",
                 "• 2 buah sosis sapi",
                 "• Minyak untuk menumis"
-            ),
-            listOf(
+            ), listOf(
                 "• 250 gr dada ayam",
                 "• 12 siung bawang merah",
                 "• 12 buah cabai rawit merah",
@@ -93,8 +88,7 @@ object RecipeData {
                 "• 2 sdm air perasan jeruk nipis",
                 "• 1 sdt garam",
                 "• ½ sdt AJI-NO-MOTO®"
-            ),
-            listOf(
+            ), listOf(
                 "• 300 gr Daging slice",
                 "• 6 siung Bawang merah",
                 "• 3 siung Bawang putih",
@@ -107,8 +101,7 @@ object RecipeData {
                 "• ½ sdt lada putih",
                 "• 2 butir Telur",
                 "• 1 Bungkus Sajiku® Tepung Bumbu Serbaguna Pedas"
-            ),
-            listOf(
+            ), listOf(
                 "• 1 buah sawi putih",
                 "• 250 gr daging ayam cincang",
                 "• 2 siung bawang putih, cincang",
@@ -118,8 +111,7 @@ object RecipeData {
                 "• 1 sdm minyak wijen",
                 "• 1½ sdt Masako® Light",
                 "• Chilli oil",
-            ),
-            listOf(
+            ), listOf(
                 "• 250 gr daging slice",
                 "• 250 gr Mie Hokkien",
                 "• ½ bawang bombay, iris",
@@ -128,8 +120,7 @@ object RecipeData {
                 "• 1 sdt SAORI® Bulgogi",
                 "• 1 sdt Wijen Sangrai",
                 "• 30 gr wortel, iris"
-            ),
-            listOf(
+            ), listOf(
                 "• 50 g daging ayam giling",
                 "• 50 g jagung manis pipil",
                 "• 200 g kentang rebus, haluskan",
@@ -139,8 +130,7 @@ object RecipeData {
                 "• 1 butir telur, kocok lepas, untuk pelapis",
                 "• 150 g tepung panir (orange)",
                 "• Minyak untuk menggoreng"
-            ),
-            listOf(
+            ), listOf(
                 "• 1 L kaldu ayam",
                 "• 4 sdm SAORI® Saus Teriyaki",
                 "• 5 sdm gula merah, sisir",
@@ -180,66 +170,57 @@ object RecipeData {
                 "Siapkan kulit lumpia, beri isian lumpia lalu gulung dan rekatkan dengan air.",
                 "Goreng lumpia hingga matang dan berwarna kecokelatan.",
                 SAJIKAN
-            ),
-            listOf(
+            ), listOf(
                 "Panaskan minyak kemudian tumis bawang putih, tomat, dan daun bawang hingga harum.",
                 "Tambahkan air, AJI-NO-MOTO®, dan garam. Masak sampai tomat lunak.",
                 "Masukkan tahu, lalu masak kembali sampai mendidih.",
                 "Tuang telur yang sudah dikocok lalu aduk perlahan.",
                 SAJIKAN
-            ),
-            listOf(
+            ), listOf(
                 "Haluskan ayam, udang, putih telur, minyak wijen, kecap asin, garam, gula pasir, lada putih, AJI-NO-MOTO®, tepung sagu menggunakan blender.",
                 "Setelah halus, masukkan bawang goreng dan daun bawang. Aduk menggunakan spatula.",
                 "Potong cakwe menjadi 3 bagian, gunting bagian tengahnya.",
                 "Isi cakwe dengan adonan ayam udang.",
                 "Goreng cakwe hingga matang.",
                 "Sajikan dengan Mayumi® Pedas."
-            ),
-            listOf(
+            ), listOf(
                 "Masukkan bawang merah, bawang putih, cabai rawit merah, cabai merah keriting, dan minyak ke dalam blender. Haluskan.",
                 "Tumis bumbu hingga harum dan matang.",
                 "Tambahkan telur, aduk hingga rata.",
                 "Masukkan sosis dan nasi, aduk rata.",
                 "Tambahkan garam, Masako® Ayam, dan Ajinomoto® Terasi Udang.",
                 SAJIKAN
-            ),
-            listOf(
+            ), listOf(
                 "Rebus dada ayam hingga matang, lalu suwir.",
                 "Campurkan bawang merah, cabai rawit, serai, dan daun jeruk.",
                 "Tambahkan AJI-NO-MOTO®, garam, gula, terasi, dan perasan jeruk nipis.",
                 "Panaskan minyak kelapa, tambahkan ke campuran sambal, aduk rata.",
                 "Campur ayam suwir dengan sambal.",
                 SAJIKAN
-            ),
-            listOf(
+            ), listOf(
                 "Campur bawang merah, bawang putih, ketumbar, kecap inggris, lengkuas, gula merah, baking powder, garam, lada putih, dan telur. Blender hingga halus.",
                 "Potong daging slice dan marinasi selama 30 menit.",
                 "Lumuri dengan Sajiku® Tepung Bumbu Serbaguna Pedas.",
                 "Goreng hingga kecokelatan.",
                 SAJIKAN
-            ),
-            listOf(
+            ), listOf(
                 "Potong sawi putih dari batang, kukus hingga layu.",
                 "Campur ayam cincang, bawang putih, daun bawang, wortel, jahe, minyak wijen, dan Masako® Light. Aduk rata.",
                 "Bungkus dengan sawi.",
                 "Kukus cabbage dumpling selama 15 menit.",
                 "Sajikan dengan chilli oil."
-            ),
-            listOf(
+            ), listOf(
                 "Marinasi daging dengan bawang bombay, bawang putih, daun bawang, SAORI® Bulgogi, wijen sangrai, dan wortel selama 10 menit.",
                 "Tumis daging dan mie yang sudah direbus.",
                 "Tambahkan SAORI® Bulgogi.",
                 "Sajikan dengan garnish daun bawang dan wijen."
-            ),
-            listOf(
+            ), listOf(
                 "Campur daging ayam, jagung manis, kentang, Sajiku® Ayam Goreng, telur, dan maizena. Aduk rata.",
                 "Tuang ke loyang dan kukus 15 menit.",
                 "Potong segitiga, lapisi dengan telur, gulingkan ke tepung panir.",
                 "Goreng hingga keemasan.",
                 "Sajikan dengan pelengkap."
-            ),
-            listOf(
+            ), listOf(
                 "Keruk tahu untuk tempat isi, campur sisa tahu dengan daging ayam, wortel, bawang putih, dan SAORI® Saus Teriyaki.",
                 "Isi tahu dengan adonan.",
                 "Tumis tahu isi dengan sedikit minyak hingga matang.",

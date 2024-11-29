@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_detail"
-            app:destination="@id/nav_recipe_detail"/>
+            app:destination="@id/nav_recipe_detail" />
         <action
             android:id="@+id/action_home_to_chefDetail"
-            app:destination="@id/chef_detail"/>
+            app:destination="@id/chef_detail" />
     </fragment>
 
     <fragment
@@ -23,7 +23,6 @@
         android:name="com.upi.masakin.ui.view.fragment.favorite.FavoriteFragment"
         android:label="Favorite"
         tools:layout="@layout/fragment_favorite">
-
         <action
             android:id="@+id/actionFavoriteToDetail"
             app:destination="@id/nav_recipe_detail" />
@@ -57,14 +56,13 @@
 
     <activity
         android:id="@+id/nav_recipe_detail"
-        android:label="Recipe Detail"
         android:name="com.upi.masakin.ui.view.recipe.RecipeDetailActivity"
+        android:label="Recipe Detail"
         tools:layout="@layout/activity_recipe_detail">
         <argument
             android:name="recipe"
             app:argType="com.upi.masakin.data.entities.RecipeEntity" />
     </activity>
-
 
     <activity
         android:id="@+id/chef_detail"
@@ -72,7 +70,7 @@
         tools:layout="@layout/activity_chef_detail">
         <argument
             android:name="chef"
-            app:argType="com.upi.masakin.data.entities.Chef"/>
+            app:argType="com.upi.masakin.data.entities.Chef" />
     </activity>
 
 </navigation>

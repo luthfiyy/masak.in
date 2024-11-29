@@ -8,6 +8,7 @@ import com.upi.masakin.data.repository.RecipeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
@@ -20,15 +21,11 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
 
     private fun loadRecipes() {
         viewModelScope.launch {
-            // Populate initial recipes if needed
             repository.populateInitialRecipes()
-
-            // Fetch recipes
             _recipes.value = repository.getAllRecipes()
         }
     }
 
-    // Factory for creating ViewModel with dependency injection
     class RecipeViewModelFactory(private val repository: RecipeRepository) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -39,4 +36,12 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
+
+    fun searchRecipes(query: String) = recipes.map { list ->
+        if (query.isBlank()) list
+        else list.filter { recipe ->
+            recipe.title.contains(query, ignoreCase = true)
+        }
+    }
+
 }

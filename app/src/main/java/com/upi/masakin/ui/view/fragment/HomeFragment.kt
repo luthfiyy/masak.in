@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -48,6 +49,16 @@ class HomeFragment : Fragment() {
 
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
 
+        binding.searchBar.addTextChangedListener { text ->
+            val query = text.toString().trim()
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.searchRecipes(query).collect { filteredRecipes ->
+                    listRecipeAdapter.updateRecipes(filteredRecipes)
+                }
+            }
+        }
+
+
         listRecipeAdapter = ListRecipeAdapter(ArrayList()) { recipe ->
             val action = HomeFragmentDirections.actionHomeToDetail(recipe)
             findNavController().navigate(action)
@@ -70,23 +81,23 @@ class HomeFragment : Fragment() {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                     if (modelClass.isAssignableFrom(ChefViewModel::class.java)) {
-                        return ChefViewModel(ChefRepository(requireContext()), Dispatchers.IO, requireActivity().application) as T
+                        return ChefViewModel(
+                            ChefRepository(requireContext()),
+                            Dispatchers.IO,
+                            requireActivity().application
+                        ) as T
                     }
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
                 }
             }
         )[ChefViewModel::class.java]
 
-
-
-        // Fetch and observe recipes
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.recipes.collect { recipes ->
                 listRecipeAdapter.updateRecipes(recipes)
             }
         }
 
-        // Observe and display chefs
         viewLifecycleOwner.lifecycleScope.launch {
             chefViewModel.chefs.collect { chefs ->
                 Log.d("HomeFragment", "Received chefs: ${chefs.size}")
@@ -114,10 +125,9 @@ class HomeFragment : Fragment() {
             }
         }
 
-        }
+    }
 
     @Suppress("DEPRECATION")
-    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_list -> {

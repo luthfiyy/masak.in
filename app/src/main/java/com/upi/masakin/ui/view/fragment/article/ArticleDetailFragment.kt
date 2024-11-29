@@ -17,7 +17,6 @@ class ArticleDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args: ArticleDetailFragmentArgs by navArgs()
-    private var isLiked = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,14 +37,12 @@ class ArticleDetailFragment : Fragment() {
         val article = args.article
 
         with(binding) {
-            // Load image using Glide
             Glide.with(requireContext())
                 .load(article.thumbnailUrl)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .placeholder(R.drawable.placeholder_artikel)
                 .into(ivArticleImage)
 
-            // Set text content
             tvArticleTitle.text = article.title
             tvAuthor.text = article.author
             tvPublishDate.text = article.publishDate
@@ -53,7 +50,6 @@ class ArticleDetailFragment : Fragment() {
             tvShortDescription.text = article.shortDescription
             tvArticleContent.text = article.content
 
-            // Set category and tags
             tvCategory.text = article.category.toReadableString()
             tvTags.text = article.tags.joinToString(", ")
         }
@@ -61,11 +57,10 @@ class ArticleDetailFragment : Fragment() {
 
     private fun setupListeners() {
         with(binding) {
-            // Back button click listener
             btnBack.setOnClickListener {
                 findNavController().navigateUp()
             }
-            
+
         }
     }
 
