@@ -70,12 +70,13 @@ class HomeFragment : Fragment() {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                     if (modelClass.isAssignableFrom(ChefViewModel::class.java)) {
-                        return ChefViewModel(ChefRepository(requireContext())) as T
+                        return ChefViewModel(ChefRepository(requireContext()), Dispatchers.IO, requireActivity().application) as T
                     }
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
                 }
             }
         )[ChefViewModel::class.java]
+
 
 
         // Fetch and observe recipes
@@ -113,11 +114,10 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Insert sample chefs if needed
-        chefViewModel.insertSampleChefs()
-    }
+        }
 
     @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_list -> {

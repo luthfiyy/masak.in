@@ -5,7 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
@@ -62,7 +62,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         }
 
         binding.recyclerViewFavorites.apply {
-            layoutManager = LinearLayoutManager(context)
+//            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 2)
+
             adapter = recipeAdapter
         }
     }

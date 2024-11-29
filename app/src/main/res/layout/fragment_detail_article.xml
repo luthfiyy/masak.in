@@ -31,7 +31,7 @@
                     android:id="@+id/btn_back"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/circle_background"
+                    android:background="@drawable/bg_circle"
                     android:contentDescription="@string/back"
                     android:src="@drawable/ic_arrow_back" />
 
@@ -40,13 +40,6 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <ImageButton
-                    android:id="@+id/fabLike"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/circle_background"
-                    android:contentDescription="@string/favorite"
-                    android:src="@drawable/ic_favorite_border" />
             </LinearLayout>
 
             <!-- Article Image -->
@@ -227,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/rounded_background"
+                    android:background="@drawable/bg_rounded"
                     android:orientation="vertical"
                     android:padding="16dp">
 

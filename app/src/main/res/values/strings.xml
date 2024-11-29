@@ -104,6 +104,20 @@
         <item>11k Reviews</item>
     </string-array>
 
+    <string-array name="data_videoId">
+        <item>FJVqXo4OkqE</item>
+        <item>fZlXNExJp7c</item>
+        <item>fT_T6AVOUFE</item>
+        <item>l_sgvUpxiFk</item>
+        <item>O5aMPqxsRrY</item>
+        <item>Y4bfV229R4Q</item>
+        <item>wm2JS17gSaM</item>
+        <item>HFGDIs_QgTo</item>
+        <item>j6JQKqGrSKY</item>
+        <item>dUCTWA1dldQ</item>
+    </string-array>
+
     <string name="read_time_format">%d min read</string>
     <string name="chef_recipes">Chef\'s Recipes</string>
+    <string name="contoh_desk_chef">ini contoh untuk deskripsi chef</string>
 </resources>

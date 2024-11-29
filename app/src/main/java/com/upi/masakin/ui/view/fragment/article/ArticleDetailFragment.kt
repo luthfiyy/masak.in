@@ -65,20 +65,8 @@ class ArticleDetailFragment : Fragment() {
             btnBack.setOnClickListener {
                 findNavController().navigateUp()
             }
-
-            // Favorite button click listener
-            fabLike.setOnClickListener {
-                isLiked = !isLiked
-                updateFavoriteButton()
-            }
+            
         }
-    }
-
-    private fun updateFavoriteButton() {
-        binding.fabLike.setImageResource(
-            if (isLiked) R.drawable.ic_favorite
-            else R.drawable.ic_favorite_border
-        )
     }
 
     override fun onDestroyView() {

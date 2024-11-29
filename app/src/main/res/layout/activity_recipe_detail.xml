@@ -33,7 +33,7 @@
                     android:id="@+id/btn_back"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/circle_background"
+                    android:background="@drawable/bg_circle"
                     android:contentDescription="@string/back"
                     android:src="@drawable/ic_arrow_back" />
 
@@ -46,7 +46,7 @@
                     android:id="@+id/fabLike"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/circle_background"
+                    android:background="@drawable/bg_circle"
                     android:contentDescription="@string/favorite"
                     android:src="@drawable/ic_favorite_border" />
             </LinearLayout>
@@ -67,8 +67,17 @@
                 tools:layout_editor_absoluteX="0dp"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
-
             <!-- Rating Section -->
+
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtube_player_view"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:padding="8dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/header_layout"
+                tools:ignore="MissingConstraints" />
+
             <TextView
                 android:id="@+id/tv_detail_title"
                 android:layout_width="0dp"
@@ -204,7 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/segment_control_background"
+                android:background="@drawable/bg_segment_control"
                 android:clipToPadding="false"
                 android:elevation="0dp"
                 android:orientation="horizontal"
@@ -237,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_background"
+                android:background="@drawable/bg_rounded"
                 android:orientation="vertical"
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -286,7 +295,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_background"
+                android:background="@drawable/bg_rounded"
                 android:nestedScrollingEnabled="false"
                 android:padding="16dp"
                 android:visibility="gone"
@@ -295,8 +304,10 @@
                 app:layout_constraintTop_toBottomOf="@id/segment_control_layout"
                 tools:ignore="MissingConstraints" />
 
+
             <!-- Steps Section -->
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </ScrollView>
 

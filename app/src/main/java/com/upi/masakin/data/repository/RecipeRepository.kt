@@ -34,6 +34,7 @@ class RecipeRepository(
         val reviews = context.resources.getStringArray(R.array.data_reviews)
         val dataPhoto = context.resources.obtainTypedArray(R.array.data_image)
         val chefId = context.resources.getIntArray(R.array.data_chefId)
+        val videoId = context.resources.getStringArray(R.array.data_videoId)
 
         val listRecipe = ArrayList<RecipeEntity>()
         for (i in dataName.indices) {
@@ -46,7 +47,8 @@ class RecipeRepository(
                 serving = serving[i],
                 reviews = reviews[i],
                 image = dataPhoto.getResourceId(i, -1),
-                chefId = chefId[i]
+                chefId = chefId[i],
+                videoId = videoId[i]
             )
             listRecipe.add(recipe)
         }
@@ -67,7 +69,8 @@ class RecipeRepository(
                 serving = recipeEntity.serving,
                 reviews = recipeEntity.reviews,
                 image = recipeEntity.image,
-                chefId = recipeEntity.chefId
+                chefId = recipeEntity.chefId,
+                videoId = recipeEntity.videoId
             )
         }
     }

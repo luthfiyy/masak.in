@@ -3,11 +3,13 @@ package com.upi.masakin.ui.view.recipe
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,11 +17,14 @@ import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.upi.masakin.R
 import com.upi.masakin.adapters.RecipeStepsAdapter
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ActivityRecipeDetailBinding
 
+@Suppress("NAME_SHADOWING")
 class RecipeDetailActivity : AppCompatActivity() {
     private var recipeTitle: String? = null
     private var recipeIngredients: String? = null
@@ -31,6 +36,8 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var ingredientsSection: LinearLayout
     private lateinit var stepsAdapter: RecipeStepsAdapter
     private lateinit var binding: ActivityRecipeDetailBinding
+    private var isVideoPlaying = false
+    private var youTubePlayer: YouTubePlayer? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +50,7 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         val args by navArgs<RecipeDetailActivityArgs>()
         val recipe = args.recipe
+
 
         btnIngredients = binding.btnIngredients
         btnSteps = binding.btnSteps
@@ -79,7 +87,48 @@ class RecipeDetailActivity : AppCompatActivity() {
         btnIngredients.setOnClickListener { showBahanContent() }
         btnSteps.setOnClickListener { showCaraMasakContent() }
 
+        val youtubePlayerView = binding.youtubePlayerView
+        lifecycle.addObserver(youtubePlayerView)
+
+        binding.btnPlay.setOnClickListener {
+            val youtubePlayerView = binding.youtubePlayerView
+
+            if (!isVideoPlaying) {
+                // Show the YouTube player and start playing
+                youtubePlayerView.visibility = View.VISIBLE
+                isVideoPlaying = true
+
+                // Change button to stop icon
+                binding.btnPlay.setImageResource(R.drawable.ic_stop)
+
+                youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        // Store the player reference
+                        this@RecipeDetailActivity.youTubePlayer = youTubePlayer
+
+                        try {
+                            val videoId = recipe.videoId
+                            youTubePlayer.loadVideo(videoId, 0f)
+                        } catch (e: Exception) {
+                            Log.e("YouTubePlayer", "Error loading video", e)
+                            Toast.makeText(this@RecipeDetailActivity, "Could not load video", Toast.LENGTH_SHORT).show()
+                            resetVideoState()
+                        }
+                    }
+                })
+            } else {
+                // Stop the video and hide the player
+                resetVideoState()
+            }
+        }
         showBahanContent()
+    }
+
+    private fun resetVideoState() {
+        youTubePlayer?.pause()
+        binding.youtubePlayerView.visibility = View.GONE
+        binding.btnPlay.setImageResource(R.drawable.ic_play)
+        isVideoPlaying = false
     }
 
     private fun showBahanContent() {
@@ -202,7 +251,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         binding.stepsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@RecipeDetailActivity)
             adapter = stepsAdapter
-            background = ContextCompat.getDrawable(this@RecipeDetailActivity, R.drawable.rounded_background)
+            background = ContextCompat.getDrawable(this@RecipeDetailActivity, R.drawable.bg_rounded)
         }
     }
 }

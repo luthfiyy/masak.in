@@ -13,7 +13,7 @@ import com.upi.masakin.utils.RecipeConverters
 
 @Database(
     entities = [Chef::class, RecipeEntity::class],
-    version = 5,
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(RecipeConverters::class)

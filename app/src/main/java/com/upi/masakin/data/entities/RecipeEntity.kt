@@ -3,7 +3,7 @@ package com.upi.masakin.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity(tableName = "recipes_table")
@@ -19,7 +19,8 @@ data class RecipeEntity(
     val reviews: String,
     val image: Int,
     val isFavorite: Boolean = false,
-    val chefId: Int
+    val chefId: Int,
+    val videoId: String
 ) : Parcelable
 
 const val DAUN_BAWANG = "• 1 batang daun bawang"

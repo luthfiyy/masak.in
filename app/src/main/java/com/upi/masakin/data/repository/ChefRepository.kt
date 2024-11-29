@@ -8,6 +8,10 @@ class ChefRepository(context: Context) {
     private val chefDao = MasakinDatabase.getDatabase(context).chefDao()
 
     suspend fun getAllChefs(): List<Chef> = chefDao.getAllChefs()
-    suspend fun insertChef(chef: Chef) = chefDao.insertChef(chef)
+    suspend fun insertChef(chefs: List<Chef>) {
+        chefs.forEach { chef ->
+            chefDao.insertChef(chef)
+        }
+    }
 
 }

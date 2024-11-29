@@ -45,34 +45,35 @@ android {
 
 dependencies {
     // Core Android Dependencies
-    implementation(libs.androidx.core.ktx)          // Core KTX
-    implementation(libs.androidx.appcompat)         // AppCompat
-    implementation(libs.material)                  // Material Design Components
-    implementation(libs.androidx.constraintlayout) // ConstraintLayout
-    implementation(libs.androidx.activity)         // Activity KTX
-    implementation(libs.androidx.coordinatorlayout) // CoordinatorLayout
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.coordinatorlayout)
 
     // Navigation Component
-    implementation(libs.androidx.navigation.fragment) // Navigation Fragment
-    implementation(libs.androidx.navigation.ui)       // Navigation UI
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
-    // UI Enhancements
-    implementation(libs.lottie)  // Lottie for animations
-    implementation(libs.glide)   // Glide for image loading
+    // Database
+    implementation(libs.room)
+    implementation(libs.ktx)
+    kapt(libs.kapt)
 
-    // JSON Parsing
-    implementation(libs.gson) // GSON for JSON parsing
+    // Image and Animation
+    implementation(libs.lottie)
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
 
-    // Annotation Processing
-    annotationProcessor(libs.compiler) // Glide Annotation Processor
+    // Parsing
+    implementation(libs.gson)
 
-    // Room Database
-    implementation(libs.room) // Room Runtime
-    implementation(libs.ktx)  // Room KTX
-    kapt(libs.kapt)           // Room Annotation Processor
+    // Multimedia
+    implementation(libs.core) // YouTube player
 
-    // Testing Dependencies
-    testImplementation(libs.junit)                   // Unit testing
-    androidTestImplementation(libs.androidx.junit)   // AndroidX JUnit
-    androidTestImplementation(libs.androidx.espresso.core) // Espresso
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
