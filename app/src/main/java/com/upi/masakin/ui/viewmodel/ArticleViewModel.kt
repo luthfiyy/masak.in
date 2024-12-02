@@ -40,7 +40,7 @@ class ArticleViewModel(private val repository: ArticleRepository) : ViewModel() 
     fun searchArticle(query: String) = articles.map { list ->
         if (query.isBlank()) list
         else list.filter { article ->
-            article.title.contains(query, ignoreCase = true) // Accessing title of each Article
+            article.title.contains(query, ignoreCase = true)
         }
     }
 

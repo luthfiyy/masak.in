@@ -12,13 +12,12 @@ class  ListRecipeAdapter(
     private val onItemClick: (RecipeEntity) -> Unit
 ) : RecyclerView.Adapter<ListRecipeAdapter.ListViewHolder>() {
 
-    // Method to update the entire list
     fun updateRecipes(newRecipes: List<RecipeEntity>) {
         val diffCallback = RecipeDiffCallback(listRecipe, newRecipes)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         listRecipe.clear()
         listRecipe.addAll(newRecipes)
-        diffResult.dispatchUpdatesTo(this)  // 'this' is your adapter
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -59,12 +58,10 @@ class  ListRecipeAdapter(
         override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            // Compare by unique identifier (e.g., id)
             return oldList[oldItemPosition].id == newList[newItemPosition].id
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            // Compare the contents of the items
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
