@@ -45,7 +45,7 @@
         tools:layout="@layout/fragment_detail_article">
         <argument
             android:name="article"
-            app:argType="com.upi.masakin.model.Article" />
+            app:argType="com.upi.masakin.data.entities.Article" />
     </fragment>
 
     <fragment

@@ -1,14 +1,18 @@
-package com.upi.masakin.model
+package com.upi.masakin.data.entities
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.upi.masakin.model.ArticleCategory
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@Entity(tableName = "article_table")
 data class Article(
-    val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val author: String,
-    val category: ArtikelCategory,
+    val category: ArticleCategory.ArtikelCategory,
     val publishDate: String,
     val readTime: Int,
     val thumbnailUrl: String,
@@ -17,27 +21,13 @@ data class Article(
     val shortDescription: String
 ) : Parcelable
 
-enum class ArtikelCategory {
-    CookingTips,       // Tips Memasak
-    ChefProfile,       // Profil Chef
-    Nutrition,         // Gizi dan Kesehatan
-    KitchenTools,      // Review Peralatan
-    CulinaryCulture,   // Budaya Kuliner
-    SpecialRecipe,     // Resep Khusus
-    IngredientGuide;   // Panduan Bahan
-
-    fun toReadableString(): String {
-        return name.replace(Regex("([a-z])([A-Z])"), "$1 $2")
-    }
-}
-
 
 val sampleArtikels = listOf(
     Article(
         id = 1,
         title = "Mengenal Keel: Bagian Ayam yang Lezat dan Bergizi\n",
         author = "Fardi Rizal",
-        category = ArtikelCategory.CookingTips,
+        category = ArticleCategory.ArtikelCategory.CookingTips,
         publishDate = "13 Nov 2024",
         readTime = 7,
         thumbnailUrl = "https://cdn0-production-images-kly.akamaized.net/_q3Tmeg1orot6zB9GxOEo9JJNxo=/1280x720/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/5001700/original/002446000_1731384135-keel-adalah-bagian-ayam.jpg",
@@ -48,7 +38,7 @@ val sampleArtikels = listOf(
         id = 2,
         title = "Baby Octopus Adalah: Panduan Lengkap Mengenal Hidangan Laut Mungil nan Lezat",
         author = "Liputan 6",
-        category = ArtikelCategory.ChefProfile,
+        category = ArticleCategory.ArtikelCategory.ChefProfile,
         publishDate = "12 Nov 2024",
         readTime = 5,
         thumbnailUrl = "https://cdn0-production-images-kly.akamaized.net/uVU7US2kat8sQljjlMWB6KlEItg=/640x360/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/5001425/original/003559900_1731382652-baby-octopus-adalah.jpg",
@@ -59,7 +49,7 @@ val sampleArtikels = listOf(
         id = 3,
         title = "Cara Buat Nasi Goreng yang Lezat dan Praktis, Lengkap dengan Teknik dan Variasinya",
         author = "Liputan6",
-        category = ArtikelCategory.ChefProfile,
+        category = ArticleCategory.ArtikelCategory.ChefProfile,
         publishDate = "12 Nov 2024",
         readTime = 5,
         thumbnailUrl = "https://cdn0-production-images-kly.akamaized.net/2cET6xbKRnJJeGfXdxFW3e_ClDI=/640x360/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4982818/original/087743900_1730099439-cara-buat-nasi-goreng.jpg",

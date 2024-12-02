@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.upi.masakin.R
 import com.upi.masakin.databinding.ItemArticleBinding
-import com.upi.masakin.model.Article
+import com.upi.masakin.data.entities.Article
 
 class ArticleAdapter(
-    private val artikels: List<Article>,
+    private val artikels: MutableList<Article>,
     private val onItemClick: (Article) -> Unit
 ) : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
@@ -27,7 +27,7 @@ class ArticleAdapter(
         holder.binding.apply {
             tvArtikelTitle.text = artikel.title
             tvArtikelAuthor.text = artikel.author
-            tvArtikelCategory.text = artikel.category.toReadableString()
+            tvArtikelCategory.text = artikel.category.toString()
             tvArtikelTime.text = artikel.readTime.toString()
             tvArticleShortDescription.text = artikel.shortDescription
 
@@ -35,7 +35,6 @@ class ArticleAdapter(
                 .load(artikel.thumbnailUrl)
                 .placeholder(R.drawable.placeholder_artikel)
                 .error(R.drawable.placeholder_artikel)
-                .fallback(R.drawable.placeholder_artikel)
                 .into(ivArtikelThumbnail)
 
             root.setOnClickListener { onItemClick(artikel) }
@@ -43,6 +42,12 @@ class ArticleAdapter(
     }
 
     override fun getItemCount() = artikels.size
+
+    fun updateData(newArticles: List<Article>) {
+        artikels.clear()
+        artikels.addAll(newArticles)
+        notifyDataSetChanged()
+    }
 
     class ArticleViewHolder(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
 }
