@@ -1,4 +1,4 @@
-package com.upi.masakin.adapters
+package com.upi.masakin.adapters.recipe
 
 import android.view.LayoutInflater
 import android.view.View

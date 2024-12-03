@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.viewmodel
+package com.upi.masakin.ui.viewmodel.recipe
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +15,9 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
     private val _recipes = MutableStateFlow<List<RecipeEntity>>(emptyList())
     val recipes: StateFlow<List<RecipeEntity>> = _recipes.asStateFlow()
 
+    private val _popularRecipes = MutableStateFlow<List<RecipeEntity>>(emptyList())
+    val popularRecipes: StateFlow<List<RecipeEntity>> = _popularRecipes
+
     init {
         loadRecipes()
     }
@@ -23,6 +26,7 @@ class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
         viewModelScope.launch {
             repository.populateInitialRecipes()
             _recipes.value = repository.getAllRecipes()
+            _popularRecipes.value = repository.getPopularRecipes()
         }
     }
 

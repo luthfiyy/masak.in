@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,8 +60,7 @@
                     android:id="@+id/lChef"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                </LinearLayout>
+                    android:orientation="horizontal"/>
 
             </HorizontalScrollView>
 
@@ -94,23 +93,28 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/all"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/black" />
+                    android:textColor="@color/chip_text_selector"
+                    app:chipBackgroundColor="@color/chip_background_selector" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_popular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/background_cream"
-                    android:text="@string/popular" />
+                    android:text="@string/popular"
+                    android:textColor="@color/chip_text_selector"
+                    app:chipBackgroundColor="@color/chip_background_selector" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_recent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/background_cream"
-                    android:text="@string/recent" />
+                    android:text="@string/recent"
+                    android:textColor="@color/chip_text_selector"
+                    app:chipBackgroundColor="@color/chip_background_selector" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -125,7 +129,7 @@
             android:paddingHorizontal="16dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
-            tools:listitem="@layout/item_row_recipe"/>
+            tools:listitem="@layout/item_row_recipe" />
 
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.viewmodel
+package com.upi.masakin.ui.viewmodel.article
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

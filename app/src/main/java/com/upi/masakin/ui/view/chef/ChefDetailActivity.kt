@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.upi.masakin.adapters.ListRecipeAdapter
+import com.upi.masakin.adapters.recipe.ListRecipeAdapter
 import com.upi.masakin.data.database.MasakinDatabase
 import com.upi.masakin.databinding.ActivityChefDetailBinding
 import com.upi.masakin.ui.view.recipe.RecipeDetailActivity
@@ -21,7 +21,7 @@ class ChefDetailActivity : AppCompatActivity() {
         binding = ActivityChefDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val args by navArgs<ChefDetailActivityArgs>()
+        val args: ChefDetailActivityArgs by navArgs()
         val chef = args.chef
 
         binding.tvChefName.text = chef.name

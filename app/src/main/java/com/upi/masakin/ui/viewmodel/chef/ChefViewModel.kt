@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.viewmodel
+package com.upi.masakin.ui.viewmodel.chef
 
 import android.app.Application
 import android.util.Log

@@ -1,4 +1,4 @@
-package com.upi.masakin.adapters
+package com.upi.masakin.adapters.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -36,6 +36,7 @@ class  ListRecipeAdapter(
             imgItemPhoto.setImageResource(recipe.image)
             tvItemTitle.text = recipe.title
             tvItemTime.text = recipe.time
+            rbItemRating.rating = recipe.rating
 
             root.setOnClickListener {
                 onItemClick(recipe)

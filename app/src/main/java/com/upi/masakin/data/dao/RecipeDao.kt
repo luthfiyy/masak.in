@@ -20,4 +20,5 @@ interface RecipeDao {
 
     @Query("SELECT COUNT(*) FROM recipes_table")
     suspend fun getRecipeCount(): Int
+
 }

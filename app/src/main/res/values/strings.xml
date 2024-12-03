@@ -117,6 +117,8 @@
         <item>dUCTWA1dldQ</item>
     </string-array>
 
+
+
     <string name="read_time_format">%d min read</string>
     <string name="chef_recipes">Chef\'s Recipes</string>
     <string name="contoh_desk_chef">ini contoh untuk deskripsi chef</string>

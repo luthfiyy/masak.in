@@ -18,11 +18,10 @@ import com.google.gson.reflect.TypeToken
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.upi.masakin.R
-import com.upi.masakin.adapters.RecipeStepsAdapter
+import com.upi.masakin.adapters.recipe.RecipeStepsAdapter
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ActivityRecipeDetailBinding
 
-@Suppress("NAME_SHADOWING")
 class RecipeDetailActivity : AppCompatActivity() {
     private var recipeTitle: String? = null
     private var recipeIngredients: String? = null
@@ -46,7 +45,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        val args by navArgs<RecipeDetailActivityArgs>()
+        val args: RecipeDetailActivityArgs by navArgs()
         val recipe = args.recipe
 
         btnIngredients = binding.btnIngredients
@@ -62,6 +61,7 @@ class RecipeDetailActivity : AppCompatActivity() {
             tvDetailIngredients.text = recipe.ingredients.joinToString("\n")
             tvDetailTime.text = recipe.time
             tvDetailServing.text = recipe.serving
+            rbItemRating.rating = recipe.rating
             tvReviews.text = recipe.reviews
             imgDetailPhoto.setImageResource(recipe.image)
         }
@@ -162,6 +162,9 @@ class RecipeDetailActivity : AppCompatActivity() {
         binding.fabLike.setOnClickListener {
             if (isLiked) {
                 favoriteList.removeIf { it.id == recipe.id }
+
+                // Set a result for the FavoriteFragment to reload
+                supportFragmentManager.setFragmentResult("recipe_unliked_key", Bundle())
             } else {
                 favoriteList.add(recipe)
             }

@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.view.fragment
+package com.upi.masakin.ui.view.fragment.home
 
 import android.os.Bundle
 import android.util.Log
@@ -14,13 +14,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.upi.masakin.R
-import com.upi.masakin.adapters.ListRecipeAdapter
+import com.upi.masakin.adapters.recipe.ListRecipeAdapter
 import com.upi.masakin.data.repository.ChefRepository
 import com.upi.masakin.databinding.FragmentHomeBinding
 import com.upi.masakin.databinding.ItemChefBinding
 import com.upi.masakin.data.repository.RecipeRepository
-import com.upi.masakin.ui.viewmodel.ChefViewModel
-import com.upi.masakin.ui.viewmodel.RecipeViewModel
+import com.upi.masakin.ui.viewmodel.chef.ChefViewModel
+import com.upi.masakin.ui.viewmodel.recipe.RecipeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -54,6 +54,28 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.searchRecipes(query).collect { filteredRecipes ->
                     listRecipeAdapter.updateRecipes(filteredRecipes)
+                }
+            }
+        }
+
+        binding.chipAll.setOnClickListener {
+            binding.chipAll.isChecked = true
+            binding.chipPopular.isChecked = false
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.recipes.collect { recipes ->
+                    listRecipeAdapter.updateRecipes(recipes)
+                }
+            }
+        }
+
+        binding.chipPopular.setOnClickListener {
+            binding.chipAll.isChecked = false
+            binding.chipPopular.isChecked = true
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.popularRecipes.collect { popularRecipes ->
+                    listRecipeAdapter.updateRecipes(popularRecipes)
                 }
             }
         }
@@ -100,7 +122,6 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             chefViewModel.chefs.collect { chefs ->
-                Log.d("HomeFragment", "Received chefs: ${chefs.size}")
                 binding.lChef.removeAllViews() // Clear existing views
                 if (chefs.isEmpty()) {
                     Log.w("HomeFragment", "No chefs found")

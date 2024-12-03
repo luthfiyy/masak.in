@@ -45,7 +45,8 @@ class RecipeRepository(
                 reviews = reviews[i],
                 image = dataPhoto.getResourceId(i, -1),
                 chefId = chefId[i],
-                videoId = videoId[i]
+                videoId = videoId[i],
+                rating = (0..50).random() / 10f
             )
             listRecipe.add(recipe)
         }
@@ -66,8 +67,15 @@ class RecipeRepository(
                 reviews = recipeEntity.reviews,
                 image = recipeEntity.image,
                 chefId = recipeEntity.chefId,
-                videoId = recipeEntity.videoId
+                videoId = recipeEntity.videoId,
+                rating = recipeEntity.rating
             )
         }
     }
+
+    suspend fun getPopularRecipes(threshold: Float = 3.5f): List<RecipeEntity> =
+        withContext(ioDispatcher) {
+            recipeDao.getAllRecipesSync()
+                .filter { it.rating >= threshold }
+        }
 }

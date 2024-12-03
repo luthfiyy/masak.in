@@ -10,11 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.upi.masakin.adapters.ArticleAdapter
+import com.upi.masakin.adapters.article.ArticleAdapter
 import com.upi.masakin.data.database.MasakinDatabase
 import com.upi.masakin.data.repository.ArticleRepository
 import com.upi.masakin.databinding.FragmentArticleBinding
-import com.upi.masakin.ui.viewmodel.ArticleViewModel
+import com.upi.masakin.ui.viewmodel.article.ArticleViewModel
 import kotlinx.coroutines.launch
 
 class ArticleFragment : Fragment() {

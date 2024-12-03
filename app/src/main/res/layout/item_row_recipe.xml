@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -42,6 +41,21 @@
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="Baked salmon" />
+
+        <!-- Rating -->
+        <RatingBar
+            android:id="@+id/rb_item_rating"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="4.5"
+            android:stepSize="0.5"
+            android:progressTint="@color/yellow"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_title" />
 
         <!-- Bottom Row -->
         <LinearLayout

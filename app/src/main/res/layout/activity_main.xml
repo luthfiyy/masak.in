@@ -65,6 +65,7 @@
         app:itemTextColor="@color/bottom_nav_colors"
         app:labelVisibilityMode="selected"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

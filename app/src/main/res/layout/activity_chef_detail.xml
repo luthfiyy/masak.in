@@ -40,6 +40,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="16dp"
+            android:padding="5dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +69,9 @@
             android:id="@+id/card_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,6 +95,7 @@
                     android:textSize="14sp"
                     tools:text="Detailed description about the chef's background, expertise, and culinary journey." />
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Recipe List Title -->

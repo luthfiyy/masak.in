@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.view
+package com.upi.masakin.ui.view.main
 
 import android.os.Bundle
 import android.view.Menu

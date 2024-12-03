@@ -19,7 +19,8 @@ data class RecipeEntity(
     val image: Int,
     val isFavorite: Boolean = false,
     val chefId: Int,
-    val videoId: String
+    val videoId: String,
+    val rating: Float
 ) : Parcelable
 
 const val DAUN_BAWANG = "• 1 batang daun bawang"
