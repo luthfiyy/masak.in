@@ -15,8 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_cream"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <!-- Search Bar -->
             <com.google.android.material.textfield.TextInputLayout
@@ -28,7 +27,8 @@
                 app:boxCornerRadiusBottomStart="24dp"
                 app:boxCornerRadiusTopEnd="24dp"
                 app:boxCornerRadiusTopStart="24dp"
-                app:startIconDrawable="@drawable/ic_search">
+                app:startIconDrawable="@drawable/ic_search"
+                android:paddingHorizontal="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/searchBar"
@@ -48,27 +48,27 @@
                 android:layout_marginBottom="8dp"
                 android:text="@string/best_chefs"
                 android:textSize="18sp"
+                android:paddingHorizontal="16dp"
                 android:textStyle="bold" />
 
-            <HorizontalScrollView
+            <!-- Categories Section -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_chefs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:scrollbars="none">
+                android:clipToPadding="false"
+                android:paddingHorizontal="16dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_chef" />
 
-                <LinearLayout
-                    android:id="@+id/lChef"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
-
-            </HorizontalScrollView>
-
-            <!-- Categories Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:layout_marginBottom="8dp"
+                android:paddingHorizontal="16dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -79,18 +79,21 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/see_all"
-                    android:textColor="@android:color/darker_gray" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/see_all"-->
+<!--                    android:textColor="@android:color/darker_gray" />-->
+
+
             </LinearLayout>
 
             <!-- Category Chips -->
             <com.google.android.material.chip.ChipGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                android:paddingHorizontal="16dp">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_all"
@@ -126,7 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="10dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/item_row_recipe" />

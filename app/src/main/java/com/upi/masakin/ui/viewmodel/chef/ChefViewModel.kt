@@ -1,7 +1,6 @@
 package com.upi.masakin.ui.viewmodel.chef
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upi.masakin.R
@@ -23,21 +22,17 @@ class ChefViewModel(
 
     init {
         fetchChefs()
-
-        viewModelScope.launch(dispatcher) {
-            val existingChefs = chefRepository.getAllChefs()
-            if (existingChefs.isEmpty()) {
-                insertSampleChefs()
-            }
-        }
     }
 
 
     private fun fetchChefs() {
         viewModelScope.launch(dispatcher) {
             val fetchedChefs = chefRepository.getAllChefs()
-            _chefs.value = fetchedChefs
-            Log.d("ChefViewModel", "Fetched chefs: ${fetchedChefs.size}")
+            if (fetchedChefs.isEmpty()) {
+                insertSampleChefs()
+            } else {
+                _chefs.value = fetchedChefs
+            }
         }
     }
 
@@ -66,10 +61,14 @@ class ChefViewModel(
                 )
             )
 
-            // Iterasi dan masukkan setiap chef
             sampleChefs.forEach { chef ->
                 chefRepository.insertChef(listOf(chef))
             }
+
+            val updatedChefs = chefRepository.getAllChefs()
+            _chefs.value = updatedChefs
         }
     }
+
+
 }
