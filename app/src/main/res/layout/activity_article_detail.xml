@@ -51,6 +51,7 @@
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/alata"
                 tools:text="Complete Guide to Modern Cooking Techniques" />
 
             <!--Information -->

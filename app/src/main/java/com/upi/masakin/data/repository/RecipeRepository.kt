@@ -5,14 +5,17 @@ import com.upi.masakin.R
 import com.upi.masakin.data.database.MasakinDatabase
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.data.entities.RecipeData
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RecipeRepository(
-    private val context: Context, private val ioDispatcher: CoroutineDispatcher
+class RecipeRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val masakinDatabase: MasakinDatabase,
+    private val ioDispatcher: CoroutineDispatcher
 ) {
-    private val database = MasakinDatabase.getDatabase(context)
-    private val recipeDao = database.recipeDao()
+    private val recipeDao = masakinDatabase.recipeDao()
 
     suspend fun populateInitialRecipes() = withContext(ioDispatcher) {
         if (recipeDao.getRecipeCount() == 0) {

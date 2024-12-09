@@ -5,13 +5,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.data.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeViewModel(private val repository: RecipeRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(
+    private val repository: RecipeRepository
+) : ViewModel() {
     private val _recipes = MutableStateFlow<List<RecipeEntity>>(emptyList())
     val recipes: StateFlow<List<RecipeEntity>> = _recipes.asStateFlow()
 

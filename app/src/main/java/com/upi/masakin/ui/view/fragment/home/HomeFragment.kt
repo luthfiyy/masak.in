@@ -12,7 +12,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,20 +20,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.upi.masakin.R
 import com.upi.masakin.adapters.chef.ListChefAdapter
 import com.upi.masakin.adapters.recipe.ListRecipeAdapter
-import com.upi.masakin.data.repository.ChefRepository
 import com.upi.masakin.databinding.FragmentHomeBinding
-import com.upi.masakin.data.repository.RecipeRepository
 import com.upi.masakin.ui.viewmodel.chef.ChefViewModel
 import com.upi.masakin.ui.viewmodel.recipe.RecipeViewModel
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: RecipeViewModel
+
+    private val viewModel: RecipeViewModel by viewModels()
+    private val chefViewModel: ChefViewModel by viewModels()
+
     private lateinit var listRecipeAdapter: ListRecipeAdapter
-    private lateinit var chefViewModel: ChefViewModel
     private lateinit var listChefAdapter: ListChefAdapter
 
     override fun onCreateView(
@@ -50,6 +51,17 @@ class HomeFragment : Fragment() {
 
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
 
+        setupSearchBar()
+        setupChipFilters()
+        setupRecipeAdapter()
+        setupChefAdapter()
+        setupOptionsMenu()
+
+        observeRecipes()
+        observeChefs()
+    }
+
+    private fun setupSearchBar() {
         binding.searchBar.addTextChangedListener { text ->
             val query = text.toString().trim()
             viewLifecycleOwner.lifecycleScope.launch {
@@ -58,7 +70,9 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
 
+    private fun setupChipFilters() {
         binding.chipAll.setOnClickListener {
             binding.chipAll.isChecked = true
             binding.chipPopular.isChecked = false
@@ -80,53 +94,33 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
 
-
+    private fun setupRecipeAdapter() {
         listRecipeAdapter = ListRecipeAdapter(ArrayList()) { recipe ->
             val action = HomeFragmentDirections.actionHomeToDetail(recipe)
             findNavController().navigate(action)
         }
         binding.rvRecipes.adapter = listRecipeAdapter
+    }
 
-        viewModel = ViewModelProvider(
-            this,
-            RecipeViewModel.RecipeViewModelFactory(
-                RecipeRepository(
-                    requireContext(),
-                    Dispatchers.IO
-                )
-            )
-        )[RecipeViewModel::class.java]
-
-        chefViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                    if (modelClass.isAssignableFrom(ChefViewModel::class.java)) {
-                        return ChefViewModel(
-                            ChefRepository(requireContext()),
-                            Dispatchers.IO,
-                            requireActivity().application
-                        ) as T
-                    }
-                    throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
-                }
-            }
-        )[ChefViewModel::class.java]
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.recipes.collect { recipes ->
-                listRecipeAdapter.updateRecipes(recipes)
-            }
-        }
-
+    private fun setupChefAdapter() {
         binding.rvChefs.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
             false
         )
+    }
 
+    private fun observeRecipes() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.recipes.collect { recipes ->
+                listRecipeAdapter.updateRecipes(recipes)
+            }
+        }
+    }
+
+    private fun observeChefs() {
         viewLifecycleOwner.lifecycleScope.launch {
             chefViewModel.chefs.collect { chefs ->
                 if (chefs.isEmpty()) {
@@ -140,7 +134,9 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
 
+    private fun setupOptionsMenu() {
         val menuHost: MenuHost = requireActivity()
         val menuProvider = object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -164,9 +160,7 @@ class HomeFragment : Fragment() {
         }
         menuHost.removeMenuProvider(menuProvider)
         menuHost.addMenuProvider(menuProvider, viewLifecycleOwner)
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

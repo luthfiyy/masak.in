@@ -48,6 +48,7 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:fontFamily="@font/alata"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_chef_profile"

@@ -11,22 +11,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.upi.masakin.adapters.article.ArticleAdapter
-import com.upi.masakin.data.database.MasakinDatabase
-import com.upi.masakin.data.repository.ArticleRepository
 import com.upi.masakin.databinding.FragmentArticleBinding
 import com.upi.masakin.ui.viewmodel.article.ArticleViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ArticleFragment : Fragment() {
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var articleAdapter: ArticleAdapter
-    private val viewModel: ArticleViewModel by viewModels {
-        val database = MasakinDatabase.getDatabase(requireContext())
-        val repository = ArticleRepository(database.articleDao())
-        ArticleViewModel.ArticleViewModelFactory(repository)
-    }
+    private val viewModel: ArticleViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
