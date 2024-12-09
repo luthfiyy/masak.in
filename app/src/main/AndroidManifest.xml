@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -17,7 +18,7 @@
 
         <activity
             android:name=".ui.view.main.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".ui.view.splash.SplashActivity"
@@ -31,9 +32,15 @@
 
         <activity
             android:name=".ui.view.recipe.RecipeDetailActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
-        <activity android:name=".ui.view.chef.ChefDetailActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".ui.view.chef.ChefDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.view.ArticleDetailActivity"
+            android:exported="false" />
+
     </application>
 </manifest>

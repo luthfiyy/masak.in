@@ -35,6 +35,7 @@ abstract class MasakinDatabase : RoomDatabase() {
                     MasakinDatabase::class.java,
                     "masakin_database"
                 )
+                    .createFromAsset("masakin_database.db")
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

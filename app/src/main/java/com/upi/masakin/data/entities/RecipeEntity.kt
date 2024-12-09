@@ -1,6 +1,7 @@
 package com.upi.masakin.data.entities
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
@@ -16,7 +17,7 @@ data class RecipeEntity(
     val time: String,
     val serving: String,
     val reviews: String,
-    val image: Int,
+    @DrawableRes val image: Int,
     val isFavorite: Boolean = false,
     val chefId: Int,
     val videoId: String,

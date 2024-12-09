@@ -29,8 +29,10 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.nav_home -> binding.appbar.visibility = View.VISIBLE
-                R.id.nav_article -> binding.appbar.visibility = View.GONE
+                R.id.nav_favorite -> binding.appbar.visibility = View.VISIBLE
+                R.id.nav_article -> binding.appbar.visibility = View.VISIBLE
                 R.id.nav_profile -> binding.appbar.visibility = View.GONE
+                R.id.nav_article_detail ->binding.appbar.visibility = View.GONE
             }
         }
     }
@@ -38,5 +40,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        if (navController.currentDestination?.id == R.id.nav_article) {
+            menu.clear()
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 }

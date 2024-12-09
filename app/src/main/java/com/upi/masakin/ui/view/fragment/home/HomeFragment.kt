@@ -3,9 +3,13 @@ package com.upi.masakin.ui.view.fragment.home
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,10 +18,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.upi.masakin.R
+import com.upi.masakin.adapters.chef.ListChefAdapter
 import com.upi.masakin.adapters.recipe.ListRecipeAdapter
 import com.upi.masakin.data.repository.ChefRepository
 import com.upi.masakin.databinding.FragmentHomeBinding
-import com.upi.masakin.databinding.ItemChefBinding
 import com.upi.masakin.data.repository.RecipeRepository
 import com.upi.masakin.ui.viewmodel.chef.ChefViewModel
 import com.upi.masakin.ui.viewmodel.recipe.RecipeViewModel
@@ -30,7 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: RecipeViewModel
     private lateinit var listRecipeAdapter: ListRecipeAdapter
     private lateinit var chefViewModel: ChefViewModel
-
+    private lateinit var listChefAdapter: ListChefAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,11 +45,8 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setHasOptionsMenu(true)
 
         binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
 
@@ -120,47 +121,52 @@ class HomeFragment : Fragment() {
             }
         }
 
+        binding.rvChefs.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
         viewLifecycleOwner.lifecycleScope.launch {
             chefViewModel.chefs.collect { chefs ->
-                binding.lChef.removeAllViews() // Clear existing views
                 if (chefs.isEmpty()) {
                     Log.w("HomeFragment", "No chefs found")
-                }
-                for (chef in chefs) {
-                    val chefItemBinding = ItemChefBinding.inflate(
-                        LayoutInflater.from(context),
-                        binding.lChef,
-                        false
-                    )
-                    chefItemBinding.imgItemPhoto.setImageResource(chef.image)
-                    chefItemBinding.tvChefName.text = chef.name
-
-                    // Add click listener
-                    chefItemBinding.root.setOnClickListener {
+                } else {
+                    listChefAdapter = ListChefAdapter(chefs) { chef ->
                         val action = HomeFragmentDirections.actionHomeToChefDetail(chef)
                         findNavController().navigate(action)
                     }
-
-                    binding.lChef.addView(chefItemBinding.root)
+                    binding.rvChefs.adapter = listChefAdapter
                 }
             }
         }
 
-    }
-
-    @Suppress("DEPRECATION")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_list -> {
-                binding.rvRecipes.layoutManager = LinearLayoutManager(requireContext())
+        val menuHost: MenuHost = requireActivity()
+        val menuProvider = object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.menu_main, menu)
             }
 
-            R.id.action_grid -> {
-                binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_list -> {
+                        binding.rvRecipes.layoutManager = LinearLayoutManager(requireContext())
+                        true
+                    }
+                    R.id.action_grid -> {
+                        binding.rvRecipes.layoutManager = GridLayoutManager(requireContext(), 2)
+                        true
+                    }
+                    else -> false
+                }
             }
         }
-        return super.onOptionsItemSelected(item)
+        menuHost.removeMenuProvider(menuProvider)
+        menuHost.addMenuProvider(menuProvider, viewLifecycleOwner)
+
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

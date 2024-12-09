@@ -22,10 +22,10 @@ data class Article(
 ) : Parcelable
 
 
-val sampleArtikels = listOf(
+val sampleArticles = listOf(
     Article(
         id = 1,
-        title = "Mengenal Keel: Bagian Ayam yang Lezat dan Bergizi\n",
+        title = "Mengenal Keel: Bagian Ayam yang Lezat dan Bergizi",
         author = "Fardi Rizal",
         category = ArticleCategory.ArtikelCategory.CookingTips,
         publishDate = "13 Nov 2024",

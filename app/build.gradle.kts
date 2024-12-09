@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     alias(libs.plugins.navigation.safe.args)
-    id ("kotlin-kapt")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -44,7 +45,7 @@ android {
 }
 
 dependencies {
-    // Core Android Dependencies
+    // **Core Android Dependencies**
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,28 +53,32 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.coordinatorlayout)
 
-    // Navigation Component
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.ui)
+    // **UI and Animation**
+    implementation(libs.lottie) // Lottie animations
+    implementation(libs.glide) // Glide for image loading
+    annotationProcessor(libs.compiler) // Glide annotation processor
 
-    // Database
-    implementation(libs.room)
-    implementation(libs.ktx)
-    kapt(libs.kapt)
+    // **Navigation Component**
+    implementation(libs.androidx.navigation.fragment) // Navigation fragment
+    implementation(libs.androidx.navigation.ui) // Navigation UI
 
-    // Image and Animation
-    implementation(libs.lottie)
-    implementation(libs.glide)
-    annotationProcessor(libs.compiler)
+    // **Database and Persistence**
+    implementation(libs.room) // Room runtime
+    implementation(libs.ktx) // Room Kotlin Extensions
+    ksp(libs.ksp) // Room compiler (KSP)
 
-    // Parsing
-    implementation(libs.gson)
+    // **Dependency Injection**
+    implementation(libs.hilt) // Hilt runtime
+    ksp(libs.hilt.compiler) // Hilt compiler (KSP)
 
-    // Multimedia
-    implementation(libs.core) // YouTube player
+    // **Parsing**
+    implementation(libs.gson) // JSON parsing
 
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    // **Multimedia**
+    implementation(libs.core) // YouTube Player
+    implementation(libs.androidx.viewpager2) // ViewPager2
+    // **Testing**
+    testImplementation(libs.junit) // Unit testing with JUnit
+    androidTestImplementation(libs.androidx.junit) // Android-specific JUnit extensions
+    androidTestImplementation(libs.androidx.espresso.core) // UI testing with Espresso
 }

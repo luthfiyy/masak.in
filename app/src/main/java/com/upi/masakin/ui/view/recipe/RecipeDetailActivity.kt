@@ -6,21 +6,22 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.upi.masakin.R
-import com.upi.masakin.adapters.recipe.RecipeStepsAdapter
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ActivityRecipeDetailBinding
+import com.upi.masakin.ui.view.fragment.recipe.IngredientsFragment
+import com.upi.masakin.ui.view.fragment.recipe.StepsFragment
 
 class RecipeDetailActivity : AppCompatActivity() {
     private var recipeTitle: String? = null
@@ -28,10 +29,6 @@ class RecipeDetailActivity : AppCompatActivity() {
     private var recipeSteps: String? = null
     private var recipeDescription: String? = null
     private var isLiked: Boolean = false
-    private lateinit var btnIngredients: Button
-    private lateinit var btnSteps: Button
-    private lateinit var ingredientsSection: LinearLayout
-    private lateinit var stepsAdapter: RecipeStepsAdapter
     private lateinit var binding: ActivityRecipeDetailBinding
     private var isVideoPlaying = false
     private var youTubePlayer: YouTubePlayer? = null
@@ -48,9 +45,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         val args: RecipeDetailActivityArgs by navArgs()
         val recipe = args.recipe
 
-        btnIngredients = binding.btnIngredients
-        btnSteps = binding.btnSteps
-        ingredientsSection = binding.ingredientsSection
+        binding.ingredientsSection.visibility = View.GONE
 
         binding.btnBack.setOnClickListener {
             finish()
@@ -66,23 +61,8 @@ class RecipeDetailActivity : AppCompatActivity() {
             imgDetailPhoto.setImageResource(recipe.image)
         }
 
-        btnSteps.setOnClickListener {
-            btnSteps.isSelected = true
-            btnIngredients.isSelected = false
-        }
-
-        btnIngredients.setOnClickListener {
-            btnSteps.isSelected = false
-            btnIngredients.isSelected = true
-        }
-
-        btnSteps.isSelected = true
         setupLikeButton(recipe)
 
-        setupRecyclerView(recipe.steps)
-
-        btnIngredients.setOnClickListener { showBahanContent() }
-        btnSteps.setOnClickListener { showCaraMasakContent() }
 
         val youtubePlayerView = binding.youtubePlayerView
         lifecycle.addObserver(youtubePlayerView)
@@ -109,42 +89,34 @@ class RecipeDetailActivity : AppCompatActivity() {
                 youTubePlayer.cueVideo(videoId, 0f)
             }
         })
-        showBahanContent()
+        setupTabLayoutWithViewPager(recipe)
+
     }
 
-    private fun showBahanContent() {
-        ingredientsSection.visibility = View.VISIBLE
-        binding.stepsRecyclerView.visibility = View.GONE
+    private fun setupTabLayoutWithViewPager(recipe: RecipeEntity) {
+        val viewPagerAdapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount(): Int = 2
 
-        btnIngredients.setBackgroundTintList(
-            ContextCompat.getColorStateList(
-                this, R.color.button_active
-            )
-        )
-        btnSteps.setBackgroundTintList(
-            ContextCompat.getColorStateList(
-                this, R.color.button_inactive
-            )
-        )
+            override fun createFragment(position: Int): Fragment {
+                return when (position) {
+                    0 -> IngredientsFragment.newInstance(recipe.ingredients)
+                    1 -> StepsFragment.newInstance(recipe.steps)
+                    else -> throw IllegalArgumentException("Invalid position")
+                }
+            }
+        }
 
-        btnIngredients.setTextColor(ContextCompat.getColor(this, R.color.button_text_active))
-        btnSteps.setTextColor(ContextCompat.getColor(this, R.color.button_text_inactive))
+        binding.viewPager.adapter = viewPagerAdapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "Ingredients"
+                1 -> "Steps"
+                else -> ""
+            }
+        }.attach()
     }
 
-    private fun showCaraMasakContent() {
-        ingredientsSection.visibility = View.GONE
-        binding.stepsRecyclerView.visibility = View.VISIBLE
-
-        btnIngredients.setBackgroundTintList(
-            ContextCompat.getColorStateList(
-                this, R.color.button_inactive
-            )
-        )
-        btnSteps.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.button_active))
-
-        btnIngredients.setTextColor(ContextCompat.getColor(this, R.color.button_text_inactive))
-        btnSteps.setTextColor(ContextCompat.getColor(this, R.color.button_text_active))
-    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupLikeButton(recipe: RecipeEntity) {
@@ -163,7 +135,6 @@ class RecipeDetailActivity : AppCompatActivity() {
             if (isLiked) {
                 favoriteList.removeIf { it.id == recipe.id }
 
-                // Set a result for the FavoriteFragment to reload
                 supportFragmentManager.setFragmentResult("recipe_unliked_key", Bundle())
             } else {
                 favoriteList.add(recipe)
@@ -229,14 +200,6 @@ class RecipeDetailActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(shareIntent, "Bagikan Resep"))
     }
 
-    private fun setupRecyclerView(steps: List<String>) {
-        stepsAdapter = RecipeStepsAdapter(steps)
-        binding.stepsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@RecipeDetailActivity)
-            adapter = stepsAdapter
-            background = ContextCompat.getDrawable(this@RecipeDetailActivity, R.drawable.bg_rounded)
-        }
-    }
 
     override fun onPause() {
         super.onPause()

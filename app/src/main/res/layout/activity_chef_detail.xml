@@ -12,27 +12,16 @@
         android:padding="16dp">
 
         <!-- Header Layout -->
-        <LinearLayout
-            android:id="@+id/header_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:id="@+id/btn_back"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/bg_circle"
-                android:contentDescription="@string/back"
-                android:src="@drawable/ic_arrow_back" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_circle"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Chef Profile Image -->
         <com.google.android.material.imageview.ShapeableImageView
@@ -44,7 +33,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_layout"
+            app:layout_constraintTop_toBottomOf="@id/btn_back"
             app:shapeAppearanceOverlay="@style/RoundedImageView"
             app:strokeColor="@color/black"
             app:strokeWidth="1dp"
@@ -80,22 +69,15 @@
             app:strokeColor="@color/black"
             app:strokeWidth="2dp">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_chef_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/tv_chef_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    tools:text="Detailed description about the chef's background, expertise, and culinary journey." />
-            </LinearLayout>
-
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:padding="16dp"
+                tools:text="Detailed description about the chef's background, expertise, and culinary journey." />
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Recipe List Title -->

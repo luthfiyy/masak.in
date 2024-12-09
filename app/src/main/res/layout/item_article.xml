@@ -18,7 +18,7 @@
         android:padding="12dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_artikel_thumbnail"
+            android:id="@+id/iv_article_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_marginBottom="12dp"
@@ -30,7 +30,7 @@
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            android:id="@+id/tv_artikel_title"
+            android:id="@+id/tv_article_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -74,7 +74,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/tv_artikel_author"
+                    android:id="@+id/tv_article_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
@@ -104,7 +104,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/tv_artikel_category"
+                    android:id="@+id/tv_article_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
@@ -133,7 +133,7 @@
                     app:tint="@color/black" />
 
                 <TextView
-                    android:id="@+id/tv_artikel_time"
+                    android:id="@+id/tv_article_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"

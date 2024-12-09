@@ -47,7 +47,6 @@ class ArticleFragment : Fragment() {
             }
         }
 
-
         setupRecyclerView()
         observeArticles()
     }

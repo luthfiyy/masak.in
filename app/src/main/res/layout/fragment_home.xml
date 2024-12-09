@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_cream">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,24 +13,26 @@
         android:orientation="vertical">
 
         <!-- Top Section -->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_cream"
-            android:orientation="vertical">
+            android:background="@color/background_cream">
 
             <!-- Search Bar -->
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingHorizontal="16dp"
                 app:boxBackgroundColor="@android:color/white"
                 app:boxCornerRadiusBottomEnd="24dp"
                 app:boxCornerRadiusBottomStart="24dp"
                 app:boxCornerRadiusTopEnd="24dp"
                 app:boxCornerRadiusTopStart="24dp"
                 app:startIconDrawable="@drawable/ic_search"
-                android:paddingHorizontal="16dp">
+                tools:ignore="MissingConstraints">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/searchBar"
@@ -41,99 +45,100 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <!-- Best Chefs Section -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/textView1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="77dp"
+                android:paddingHorizontal="16dp"
                 android:text="@string/best_chefs"
                 android:textSize="18sp"
-                android:paddingHorizontal="16dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Categories Section -->
-
+            <!-- RecyclerView for Chefs -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_chefs"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:clipToPadding="false"
-                android:paddingHorizontal="16dp"
                 android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView1"
                 tools:listitem="@layout/item_chef" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- Categories Section -->
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginVertical="8dp"
                 android:paddingHorizontal="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/categories"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/see_all"-->
-<!--                    android:textColor="@android:color/darker_gray" />-->
+                android:text="@string/categories"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/rv_chefs"
+                app:layout_constraintBottom_toTopOf="@+id/chip_all"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
 
-            </LinearLayout>
-
-            <!-- Category Chips -->
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="match_parent"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_all"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
-                android:paddingHorizontal="16dp">
+                android:layout_marginStart="16dp"
+                android:text="@string/all"
+                android:textColor="@color/chip_text_selector"
+                app:chipBackgroundColor="@color/chip_background_selector"
+                app:chipStrokeColor="@color/black"
+                app:layout_constraintBaseline_toBaselineOf="@+id/chip_popular"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/all"
-                    android:textColor="@color/chip_text_selector"
-                    app:chipBackgroundColor="@color/chip_background_selector" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_popular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/popular"
+                android:textColor="@color/chip_text_selector"
+                app:chipBackgroundColor="@color/chip_background_selector"
+                app:chipStrokeColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/chip_all" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_popular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/popular"
-                    android:textColor="@color/chip_text_selector"
-                    app:chipBackgroundColor="@color/chip_background_selector" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_recent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/recent"
+                android:textColor="@color/chip_text_selector"
+                app:chipBackgroundColor="@color/chip_background_selector"
+                app:chipStrokeColor="@color/black"
+                app:layout_constraintBaseline_toBaselineOf="@+id/chip_popular"
+                app:layout_constraintStart_toEndOf="@+id/chip_popular" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_recent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recent"
-                    android:textColor="@color/chip_text_selector"
-                    app:chipBackgroundColor="@color/chip_background_selector" />
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- RecyclerView Section -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_recipes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/background_cream"
             android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
             android:paddingHorizontal="10dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/item_row_recipe" />
-
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
