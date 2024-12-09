@@ -15,7 +15,7 @@
             app:destination="@id/nav_recipe_detail" />
         <action
             android:id="@+id/action_home_to_chefDetail"
-            app:destination="@id/chef_detail" />
+            app:destination="@id/nav_chef_detail" />
     </fragment>
 
     <fragment
@@ -35,17 +35,7 @@
         tools:layout="@layout/fragment_article">
         <action
             android:id="@+id/action_articleFragment_to_articleDetailFragment"
-            app:destination="@id/articleDetailFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/articleDetailFragment"
-        android:name="com.upi.masakin.ui.view.fragment.article.ArticleDetailFragment"
-        android:label="Article Detail"
-        tools:layout="@layout/fragment_detail_article">
-        <argument
-            android:name="article"
-            app:argType="com.upi.masakin.data.entities.Article" />
+            app:destination="@id/nav_article_detail" />
     </fragment>
 
     <fragment
@@ -65,12 +55,21 @@
     </activity>
 
     <activity
-        android:id="@+id/chef_detail"
+        android:id="@+id/nav_chef_detail"
         android:name="com.upi.masakin.ui.view.chef.ChefDetailActivity"
         tools:layout="@layout/activity_chef_detail">
         <argument
             android:name="chef"
             app:argType="com.upi.masakin.data.entities.Chef" />
+    </activity>
+
+    <activity
+        android:id="@+id/nav_article_detail"
+        android:name="com.upi.masakin.ui.view.ArticleDetailActivity"
+        tools:layout="@layout/activity_chef_detail">
+        <argument
+            android:name="article"
+            app:argType="com.upi.masakin.data.entities.Article" />
     </activity>
 
 </navigation>
