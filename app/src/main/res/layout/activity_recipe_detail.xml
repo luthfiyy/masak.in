@@ -60,7 +60,7 @@
                 android:id="@+id/youtube_player_view"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/fabLike"
                 tools:ignore="MissingConstraints"

@@ -3,6 +3,7 @@ package com.upi.masakin.data.database
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.upi.masakin.data.api.MealApiService
 import com.upi.masakin.data.dao.ArticleDao
 import com.upi.masakin.data.dao.ChefDao
 import com.upi.masakin.data.dao.RecipeDao
@@ -16,6 +17,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -32,7 +35,7 @@ object DatabaseModule {
         )
             .createFromAsset("masakin_database.db")
             .fallbackToDestructiveMigration()
-            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE) // Optional: For performance
+            .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()
     }
 
@@ -62,15 +65,25 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideMealApiService(): MealApiService {
+        return Retrofit.Builder()
+            .baseUrl("https://www.themealdb.com/api/json/v1/1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MealApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideRecipeRepository(
         @ApplicationContext context: Context,
         masakinDatabase: MasakinDatabase,
+        mealApiService: MealApiService,
         ioDispatcher: CoroutineDispatcher
     ): RecipeRepository {
-        return RecipeRepository(context, masakinDatabase, ioDispatcher)
+        return RecipeRepository(context, masakinDatabase, ioDispatcher, mealApiService)
     }
-
-
     @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }
+

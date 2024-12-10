@@ -32,11 +32,9 @@ class ChefViewModel @Inject constructor(
     val chefs: StateFlow<List<Chef>> = _chefs.asStateFlow()
 
     private val _recipesByChef = MutableStateFlow<List<RecipeEntity>>(emptyList())
-    val recipesByChef: StateFlow<List<RecipeEntity>> = _recipesByChef.asStateFlow()
 
     // Error handling state flow
     private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
 
     // Function to get recipes for a specific chef
     fun getRecipesByChefId(chefId: Int): Flow<List<RecipeEntity>> {

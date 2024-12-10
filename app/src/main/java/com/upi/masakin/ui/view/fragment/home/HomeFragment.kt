@@ -64,13 +64,21 @@ class HomeFragment : Fragment() {
     private fun setupSearchBar() {
         binding.searchBar.addTextChangedListener { text ->
             val query = text.toString().trim()
+
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.searchRecipes(query).collect { filteredRecipes ->
-                    listRecipeAdapter.updateRecipes(filteredRecipes)
-                }
+                viewModel.searchRecipes(query)
             }
         }
     }
+
+    private fun observeRecipes() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.recipes.collect { recipes ->
+                listRecipeAdapter.updateRecipes(recipes)
+            }
+        }
+    }
+
 
     private fun setupChipFilters() {
         binding.chipAll.setOnClickListener {
@@ -110,14 +118,6 @@ class HomeFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-    }
-
-    private fun observeRecipes() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.recipes.collect { recipes ->
-                listRecipeAdapter.updateRecipes(recipes)
-            }
-        }
     }
 
     private fun observeChefs() {

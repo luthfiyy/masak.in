@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.upi.masakin.R
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ItemRowRecipeBinding
 
-class  ListRecipeAdapter(
-    private val listRecipe: ArrayList<RecipeEntity>,
-    private val onItemClick: (RecipeEntity) -> Unit
+class ListRecipeAdapter(
+    private val listRecipe: ArrayList<RecipeEntity>, private val onItemClick: (RecipeEntity) -> Unit
 ) : RecyclerView.Adapter<ListRecipeAdapter.ListViewHolder>() {
 
     fun updateRecipes(newRecipes: List<RecipeEntity>) {
@@ -22,9 +23,7 @@ class  ListRecipeAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding = ItemRowRecipeBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return ListViewHolder(binding)
     }
@@ -33,7 +32,9 @@ class  ListRecipeAdapter(
         val recipe = listRecipe[position]
 
         holder.binding.apply {
-            imgItemPhoto.setImageResource(recipe.image)
+            Glide.with(root.context).load(recipe.image)
+                .placeholder(R.drawable.placeholder_article)
+                .into(imgItemPhoto)
             tvItemTitle.text = recipe.title
             tvItemTime.text = recipe.time
             rbItemRating.rating = recipe.rating
@@ -46,12 +47,10 @@ class  ListRecipeAdapter(
 
     override fun getItemCount(): Int = listRecipe.size
 
-    class ListViewHolder(val binding: ItemRowRecipeBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class ListViewHolder(val binding: ItemRowRecipeBinding) : RecyclerView.ViewHolder(binding.root)
 
     class RecipeDiffCallback(
-        private val oldList: List<RecipeEntity>,
-        private val newList: List<RecipeEntity>
+        private val oldList: List<RecipeEntity>, private val newList: List<RecipeEntity>
     ) : DiffUtil.Callback() {
 
         override fun getOldListSize(): Int = oldList.size

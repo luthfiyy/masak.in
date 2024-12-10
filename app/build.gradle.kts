@@ -25,8 +25,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -71,12 +70,17 @@ dependencies {
     implementation(libs.hilt) // Hilt runtime
     ksp(libs.hilt.compiler) // Hilt compiler (KSP)
 
+    // **API**
+    implementation(libs.retrofit) // Retrofit library
+    implementation(libs.retrofit2.converter.gson) // Gson converter for Retrofit
+
     // **Parsing**
     implementation(libs.gson) // JSON parsing
 
     // **Multimedia**
-    implementation(libs.core) // YouTube Player
-    implementation(libs.androidx.viewpager2) // ViewPager2
+    implementation(libs.youtube.player) // YouTube Player library (assuming 'libs.core' is for YouTube Player)
+    implementation(libs.androidx.viewpager2) // ViewPager2 for displaying content
+
     // **Testing**
     testImplementation(libs.junit) // Unit testing with JUnit
     androidTestImplementation(libs.androidx.junit) // Android-specific JUnit extensions

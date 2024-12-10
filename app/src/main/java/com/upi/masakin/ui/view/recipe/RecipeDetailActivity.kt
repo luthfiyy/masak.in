@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -58,7 +60,9 @@ class RecipeDetailActivity : AppCompatActivity() {
             tvDetailServing.text = recipe.serving
             rbItemRating.rating = recipe.rating
             tvReviews.text = recipe.reviews
-            imgDetailPhoto.setImageResource(recipe.image)
+            Glide.with(this@RecipeDetailActivity).load(recipe.image)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .placeholder(R.drawable.placeholder_article).into(imgDetailPhoto)
         }
 
         setupLikeButton(recipe)
@@ -199,7 +203,6 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         startActivity(Intent.createChooser(shareIntent, "Bagikan Resep"))
     }
-
 
     override fun onPause() {
         super.onPause()
