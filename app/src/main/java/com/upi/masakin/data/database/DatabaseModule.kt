@@ -76,12 +76,10 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideRecipeRepository(
-        @ApplicationContext context: Context,
-        masakinDatabase: MasakinDatabase,
         mealApiService: MealApiService,
         ioDispatcher: CoroutineDispatcher
     ): RecipeRepository {
-        return RecipeRepository(context, masakinDatabase, ioDispatcher, mealApiService)
+        return RecipeRepository(ioDispatcher, mealApiService)
     }
     @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO

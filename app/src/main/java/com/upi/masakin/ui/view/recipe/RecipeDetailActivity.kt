@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -20,6 +21,7 @@ import com.google.gson.reflect.TypeToken
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.upi.masakin.R
+import com.upi.masakin.adapters.recipe.IngredientAdapter
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ActivityRecipeDetailBinding
 import com.upi.masakin.ui.view.fragment.recipe.IngredientsFragment
@@ -55,7 +57,6 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         with(binding) {
             tvDetailTitle.text = recipe.title
-            tvDetailIngredients.text = recipe.ingredients.joinToString("\n")
             tvDetailTime.text = recipe.time
             tvDetailServing.text = recipe.serving
             rbItemRating.rating = recipe.rating
@@ -67,6 +68,12 @@ class RecipeDetailActivity : AppCompatActivity() {
 
         setupLikeButton(recipe)
 
+        val rvIngredients = binding.rvIngredients
+        rvIngredients.layoutManager = LinearLayoutManager(this)
+        rvIngredients.adapter = IngredientAdapter(
+            recipe.ingredients,
+            recipe.ingredientImages ?: emptyList()
+        )
 
         val youtubePlayerView = binding.youtubePlayerView
         lifecycle.addObserver(youtubePlayerView)
@@ -103,8 +110,16 @@ class RecipeDetailActivity : AppCompatActivity() {
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
-                    0 -> IngredientsFragment.newInstance(recipe.ingredients)
-                    1 -> StepsFragment.newInstance(recipe.steps)
+                    0 -> {
+                        // Untuk ingredients, karena sudah dalam bentuk List<String>
+                        IngredientsFragment.newInstance(
+                            recipe.ingredients,
+                            recipe.ingredientImages
+                        )
+                    }
+                    1 -> StepsFragment.newInstance(
+                        recipe.steps
+                    )
                     else -> throw IllegalArgumentException("Invalid position")
                 }
             }
@@ -120,7 +135,6 @@ class RecipeDetailActivity : AppCompatActivity() {
             }
         }.attach()
     }
-
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupLikeButton(recipe: RecipeEntity) {
