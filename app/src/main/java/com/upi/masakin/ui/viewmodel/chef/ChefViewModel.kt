@@ -51,10 +51,17 @@ class ChefViewModel @Inject constructor(
         }.flowOn(dispatcher)
     }
 
-    // Initialization block
     init {
         fetchChefs()
-        checkAndInsertSampleChefs()
+
+        // Check if chefs are empty after initial fetch
+        viewModelScope.launch(dispatcher) {
+            if (_chefs.value.isEmpty()) {
+                insertSampleChefs()
+                // Re-fetch after insertion
+                fetchChefs()
+            }
+        }
     }
 
     // Fetch all chefs from the repository
@@ -71,20 +78,6 @@ class ChefViewModel @Inject constructor(
         }
     }
 
-    // Check and insert sample chefs if no chefs exist
-    private fun checkAndInsertSampleChefs() {
-        viewModelScope.launch(dispatcher) {
-            try {
-                val existingChefs = chefRepository.getAllChefs()
-                if (existingChefs.isEmpty()) {
-                    insertSampleChefs()
-                }
-            } catch (e: Exception) {
-                Log.e("ChefViewModel", "Error checking chefs", e)
-                insertSampleChefs()
-            }
-        }
-    }
 
     // Insert sample chefs into the repository
     private fun insertSampleChefs() {
