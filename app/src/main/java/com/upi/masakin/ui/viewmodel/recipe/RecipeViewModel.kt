@@ -1,7 +1,6 @@
 package com.upi.masakin.ui.viewmodel.recipe
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.data.repository.RecipeRepository
@@ -41,14 +40,10 @@ class RecipeViewModel @Inject constructor(
         }
     }
 
-    class RecipeViewModelFactory(private val repository: RecipeRepository) :
-        ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(RecipeViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return RecipeViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
+    fun fetchPopularRecipes(query: String, threshold: Float = 3.5f) {
+        viewModelScope.launch {
+            val recipes = repository.getPopularRecipes(threshold, query)
+            _popularRecipes.value = recipes
         }
     }
 }

@@ -38,7 +38,7 @@
                     android:id="@+id/searchBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/search"
+                    android:hint="@string/search" 
                     android:inputType="text"
                     android:paddingStart="48dp"
                     android:paddingEnd="0dp" />
@@ -112,18 +112,6 @@
                 app:chipStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/chip_all" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_recent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/recent"
-                android:textColor="@color/chip_text_selector"
-                app:chipBackgroundColor="@color/chip_background_selector"
-                app:chipStrokeColor="@color/black"
-                app:layout_constraintBaseline_toBaselineOf="@+id/chip_popular"
-                app:layout_constraintStart_toEndOf="@+id/chip_popular" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

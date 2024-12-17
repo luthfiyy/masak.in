@@ -96,6 +96,9 @@ class HomeFragment : Fragment() {
             binding.chipAll.isChecked = false
             binding.chipPopular.isChecked = true
 
+            val searchQuery = binding.searchBar.text.toString().trim()
+            viewModel.fetchPopularRecipes(searchQuery)
+
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.popularRecipes.collect { popularRecipes ->
                     listRecipeAdapter.updateRecipes(popularRecipes)
