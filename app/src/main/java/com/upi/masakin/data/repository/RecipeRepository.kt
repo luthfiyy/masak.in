@@ -1,5 +1,7 @@
 package com.upi.masakin.data.repository
 
+import android.content.Context
+import com.upi.masakin.R
 import com.upi.masakin.data.api.Meal
 import com.upi.masakin.data.api.MealApiService
 import com.upi.masakin.data.entities.RecipeEntity
@@ -8,6 +10,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RecipeRepository @Inject constructor(
+    private val context: Context,
     private val ioDispatcher: CoroutineDispatcher,
     private val mealApiService: MealApiService
 ) {
@@ -19,7 +22,7 @@ class RecipeRepository @Inject constructor(
     suspend fun fetchRecipesFromApi(query: String): List<RecipeEntity> = withContext(ioDispatcher) {
         val response = mealApiService.searchMeals(query)
         if (response.isSuccessful) {
-            response.body()?.meals?.map { meal ->
+            response.body()?.meals?.mapIndexed { index, meal ->
                 RecipeEntity(
                     id = meal.idMeal.toInt(),
                     title = meal.strMeal,
@@ -31,7 +34,13 @@ class RecipeRepository @Inject constructor(
                     serving = estimateServing(meal),
                     reviews = (0..10000).random().toString(),
                     image = meal.strMealThumb ?: "",
-                    chefId = 0,
+                    chefId = when (index % 4) {
+                        0 -> 1
+                        1 -> 2
+                        2 -> 3
+                        3 -> 4
+                        else -> 1
+                    },
                     videoId = extractYoutubeId(meal.strYoutube) ?: "",
                     rating = (0..50).random() / 10f
                 )

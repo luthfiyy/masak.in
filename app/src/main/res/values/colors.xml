@@ -30,5 +30,10 @@
     <color name="transparent_black">#99000000</color>
     <color name="transparent">#00000000</color>
     <color name="_99000000">#99000000</color>
-    <color name="yellow">#FFD700</color>
+    <color name="yellow">#FBBC04</color>
+    <color name="purple">#6C5CE7</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="red">#EA4335</color>
+    <color name="green">#34A853</color>
+    <color name="blue">#4285F4</color>
 </resources>

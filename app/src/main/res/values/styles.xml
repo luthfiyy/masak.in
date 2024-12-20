@@ -31,4 +31,11 @@
     <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabBackground">@drawable/tab_stroke_background</item>
     </style>
+
+    <style name="CustomShapeAppearance" parent="">
+        <item name="cornerSizeTopLeft">32dp</item>
+        <item name="cornerSizeTopRight">32dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
 </resources>

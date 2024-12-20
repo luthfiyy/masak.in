@@ -69,7 +69,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:padding="12dp"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/email_icon"
@@ -88,6 +89,7 @@
                 android:textColor="@color/grey_dark"
                 android:textSize="16sp" />
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
     <!-- Buttons Section -->

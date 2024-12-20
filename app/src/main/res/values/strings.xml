@@ -6,7 +6,7 @@
     <string name="list">List</string>
     <string name="grid">Grid</string>
     <string name="name">Nur Luthfiyah</string>
-    <string name="email">luthfiy1304@gmail.com</string>
+    <string name="email">E-Mail</string>
     <string name="greeting">Hi, Upi</string>
     <string name="morning">Good morning!</string>
     <string name="home">Home</string>
@@ -120,4 +120,24 @@
     <string name="read_time_format">%d min read</string>
     <string name="chef_recipes">Chef\'s Recipes</string>
     <string name="contoh_desk_chef">ini contoh untuk deskripsi chef</string>
+    <string name="no_recipe">No Recipe</string>
+    <string name="test_crash">Test Crash</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
+    <string name="dont_have_account">dont have account?</string>
+    <string name="register">register</string>
+    <string name="already_have_account">already have account?</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="create_account">create account</string>
+    <string name="full_name">full name</string>
+    <string name="enter_your_details_below">Enter your details below</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="get_started">Get Started</string>
+    <string name="sign_in">Sign In</string>
+    <string name="or_sign_in_with">Or sign in with</string>
+    <string name="get_started_free">Get started free.</string>
+    <string name="free_forever_no_credit_card_needed">Free forever. No credit card needed.</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or_sign_up_with">Or sign up with</string>
 </resources>

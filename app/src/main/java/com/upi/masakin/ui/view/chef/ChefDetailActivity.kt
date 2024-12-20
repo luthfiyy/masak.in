@@ -2,6 +2,8 @@ package com.upi.masakin.ui.view.chef
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -38,6 +40,8 @@ class ChefDetailActivity : AppCompatActivity() {
         setupRecyclerView()
         observeRecipes(chef.id)
         setupListeners()
+
+        chefViewModel.debugChefRecipes()
     }
 
     private fun setupRecyclerView() {
@@ -59,7 +63,17 @@ class ChefDetailActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 chefViewModel.getRecipesByChefId(chefId)
                     .collect { recipes ->
+                        Log.d("ChefDetailActivity", "Recipes received: ${recipes.size}")
                         recipeAdapter.updateRecipes(recipes)
+
+                        // Add this to check if the list is empty
+                        if (recipes.isEmpty()) {
+                            Log.e("ChefDetailActivity", "No recipes found for chef ID: $chefId")
+                            // Optionally, show an empty state view
+                            binding.tvNoRecipes.visibility = View.VISIBLE
+                        } else {
+                            binding.tvNoRecipes.visibility = View.GONE
+                        }
                     }
             }
         }

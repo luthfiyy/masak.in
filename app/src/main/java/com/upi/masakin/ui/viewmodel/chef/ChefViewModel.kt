@@ -52,17 +52,15 @@ class ChefViewModel @Inject constructor(
     }
 
     init {
-        fetchChefs()
-
-        // Check if chefs are empty after initial fetch
         viewModelScope.launch(dispatcher) {
-            if (_chefs.value.isEmpty()) {
+            val chefsInDatabase = chefRepository.getAllChefs()
+            if (chefsInDatabase.isEmpty()) {
                 insertSampleChefs()
-                // Re-fetch after insertion
-                fetchChefs()
             }
+            fetchChefs()
         }
     }
+
 
     // Fetch all chefs from the repository
     private fun fetchChefs() {
@@ -107,6 +105,19 @@ class ChefViewModel @Inject constructor(
 
             // Use a single insert call instead of iterating
             chefRepository.insertChef(sampleChefs)
+        }
+    }
+
+    fun debugChefRecipes() {
+        viewModelScope.launch(dispatcher) {
+            val allChefs = chefRepository.getAllChefs()
+            allChefs.forEach { chef ->
+                val recipes = chefDao.getRecipesByChefId(chef.id)
+                Log.d("ChefViewModel", "Chef ${chef.name} (ID: ${chef.id}) has ${recipes.size} recipes")
+                recipes.forEach { recipe ->
+                    Log.d("ChefViewModel", "Recipe: ${recipe.title}, ChefId: ${recipe.chefId}")
+                }
+            }
         }
     }
 }
