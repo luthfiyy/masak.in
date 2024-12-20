@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.navigation.safe.args)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -13,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.upi.masakin"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -23,7 +26,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
@@ -80,6 +83,14 @@ dependencies {
     // **Multimedia**
     implementation(libs.youtube.player) // YouTube Player library (assuming 'libs.core' is for YouTube Player)
     implementation(libs.androidx.viewpager2) // ViewPager2 for displaying content
+
+    // Firebase Crashlytics and Auth
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
+
 
     // **Testing**
     testImplementation(libs.junit) // Unit testing with JUnit

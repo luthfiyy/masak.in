@@ -1,8 +1,9 @@
 [versions]
-agp = "8.6.1"
+agp = "8.7.3"
 compiler = "4.12.0"
 coordinatorlayout = "1.2.0"
 coreVersion = "11.1.0"
+firebaseBom = "33.7.0"
 glide = "4.16.0"
 gson = "2.10.1"
 kotlin = "2.0.21"
@@ -15,7 +16,8 @@ lottie = "6.1.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
-navigationCompose = "2.8.4"
+navigationCompose = "2.8.5"
+playServicesAuth = "21.3.0"
 retrofit = "2.11.0"
 room = "2.6.1"
 viewpager2 = "1.1.0"
@@ -29,6 +31,11 @@ androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragme
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navigationCompose" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 youtube-player = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "coreVersion" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }

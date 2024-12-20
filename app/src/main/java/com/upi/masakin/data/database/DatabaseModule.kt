@@ -3,6 +3,7 @@ package com.upi.masakin.data.database
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.google.firebase.auth.FirebaseAuth
 import com.upi.masakin.data.api.MealApiService
 import com.upi.masakin.data.dao.ArticleDao
 import com.upi.masakin.data.dao.ChefDao
@@ -76,12 +77,18 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideRecipeRepository(
+        @ApplicationContext context: Context,
         mealApiService: MealApiService,
         ioDispatcher: CoroutineDispatcher
     ): RecipeRepository {
-        return RecipeRepository(ioDispatcher, mealApiService)
+        return RecipeRepository(context, ioDispatcher, mealApiService)
     }
+
     @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 }
 
