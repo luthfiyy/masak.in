@@ -3,9 +3,11 @@ package com.upi.masakin.ui.view.recipe
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,8 +18,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.upi.masakin.R
@@ -72,7 +77,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         rvIngredients.layoutManager = LinearLayoutManager(this)
         rvIngredients.adapter = IngredientAdapter(
             recipe.ingredients,
-            recipe.ingredientImages ?: emptyList()
+            recipe.ingredientImages
         )
 
         val youtubePlayerView = binding.youtubePlayerView
@@ -111,7 +116,6 @@ class RecipeDetailActivity : AppCompatActivity() {
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
                     0 -> {
-                        // Untuk ingredients, karena sudah dalam bentuk List<String>
                         IngredientsFragment.newInstance(
                             recipe.ingredients,
                             recipe.ingredientImages
@@ -136,35 +140,120 @@ class RecipeDetailActivity : AppCompatActivity() {
         }.attach()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    // Di RecipeDetailActivity, tambahkan logging di setupLikeButton:
     private fun setupLikeButton(recipe: RecipeEntity) {
-        val sharedPrefs = getSharedPreferences("FavoriteRecipes", MODE_PRIVATE)
-        val gson = Gson()
+        val currentUser = FirebaseAuth.getInstance().currentUser
 
-        val favoritesJson = sharedPrefs.getString("favorite_recipes", "[]")
-        val type = object : TypeToken<ArrayList<RecipeEntity>>() {}.type
-        val favoriteList =
-            gson.fromJson<ArrayList<RecipeEntity>>(favoritesJson, type) ?: ArrayList()
+        // Debug user state
+        Log.d("RecipeDebug", "=== User Debug ===")
+        Log.d("RecipeDebug", "Current user: ${currentUser?.uid}")
+        Log.d("RecipeDebug", "Is anonymous: ${currentUser?.isAnonymous}")
 
-        isLiked = favoriteList.any { it.id == recipe.id }
-        updateLikeButtonState()
+        if (currentUser == null || currentUser.isAnonymous) {
+            Log.d("RecipeDebug", "User not logged in or anonymous")
+            binding.fabLike.setOnClickListener {
+                Toast.makeText(
+                    this@RecipeDetailActivity,
+                    "Please login to save favorite recipes",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            return
+        }
 
-        binding.fabLike.setOnClickListener {
-            if (isLiked) {
-                favoriteList.removeIf { it.id == recipe.id }
+        val database = FirebaseDatabase.getInstance("https://masakin-76b91-default-rtdb.asia-southeast1.firebasedatabase.app")
+        val path = "users/${currentUser.uid}/favorite_recipes"
+        val userId = currentUser.uid
+        val favoriteRecipesRef = database.getReference("users/$userId/favorite_recipes/${recipe.id}")
 
-                supportFragmentManager.setFragmentResult("recipe_unliked_key", Bundle())
-            } else {
-                favoriteList.add(recipe)
+        // Debug database reference
+        Log.d("RecipeDebug", "=== Database Reference Debug ===")
+        Log.d("RecipeDebug", "Reference path: ${favoriteRecipesRef.path}")
+        Log.d("RecipeDebug", "Recipe ID: ${recipe.id}")
+
+        database.getReference(path).get()
+            .addOnSuccessListener { snapshot ->
+                Log.d("FavoriteDebug", "Raw data at path: $path")
+                Log.d("FavoriteDebug", "Snapshot exists: ${snapshot.exists()}")
+                Log.d("FavoriteDebug", "Snapshot value: ${snapshot.value}")
+                Log.d("FavoriteDebug", "Children count: ${snapshot.childrenCount}")
+                snapshot.children.forEach { child ->
+                    Log.d("FavoriteDebug", "Child key: ${child.key}")
+                    Log.d("FavoriteDebug", "Child value: ${child.value}")
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("FavoriteDebug", "Failed to read data: ${e.message}")
             }
 
-            val editor = sharedPrefs.edit()
-            val updatedJson = gson.toJson(favoriteList)
-            editor.putString("favorite_recipes", updatedJson)
-            editor.apply()
+        favoriteRecipesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Debug snapshot
+                Log.d("RecipeDebug", "=== Like Status Debug ===")
+                Log.d("RecipeDebug", "Snapshot exists: ${snapshot.exists()}")
+                Log.d("RecipeDebug", "Snapshot value: ${snapshot.value}")
 
-            isLiked = !isLiked
-            updateLikeButtonState()
+                isLiked = snapshot.exists()
+                updateLikeButtonState()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("RecipeDebug", "=== Error Debug ===")
+                Log.e("RecipeDebug", "Error checking favorite status: ${error.message}")
+                Log.e("RecipeDebug", "Error details: ${error.details}")
+            }
+        })
+
+        binding.fabLike.setOnClickListener {
+            // Debug like action
+            Log.d("RecipeDebug", "=== Like Action Debug ===")
+            Log.d("RecipeDebug", "Current like status: $isLiked")
+            Log.d("RecipeDebug", "Recipe to save: ${recipe.title}")
+
+            if (isLiked) {
+                favoriteRecipesRef.removeValue()
+                    .addOnSuccessListener {
+                        Log.d("RecipeDebug", "Successfully removed from favorites")
+                        isLiked = false
+                        updateLikeButtonState()
+                        Toast.makeText(
+                            this@RecipeDetailActivity,
+                            "Removed from favorites",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("RecipeDebug", "Error removing from favorites", e)
+                        Toast.makeText(
+                            this@RecipeDetailActivity,
+                            "Error: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            } else {
+            // Buat salinan resep dengan favorite = true
+            val recipeToSave = recipe.copy(isFavorite = true)
+
+            favoriteRecipesRef.setValue(recipeToSave)
+                .addOnSuccessListener {
+                    Log.d("RecipeDebug", "Successfully added to favorites")
+                    isLiked = true
+                    updateLikeButtonState()
+                    Toast.makeText(
+                        this@RecipeDetailActivity,
+                        "Added to favorites",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                .addOnFailureListener { e ->
+                    Log.e("RecipeDebug", "Error adding to favorites", e)
+                    Toast.makeText(
+                        this@RecipeDetailActivity,
+                        "Error: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
         }
     }
 

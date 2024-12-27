@@ -1,19 +1,15 @@
-@file:Suppress("DEPRECATION")
-
 package com.upi.masakin.ui.view
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.upi.masakin.R
@@ -26,14 +22,32 @@ import javax.inject.Inject
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 
-    private lateinit var googleSignInClient: GoogleSignInClient
-
-    companion object {
-        private const val RC_SIGN_IN = 9001
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        try {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                account?.idToken?.let { token ->
+                    firebaseAuthWithGoogle(token)
+                } ?: run {
+                    showLoading(false)
+                    showError("Google Sign In failed: No ID token found")
+                }
+            } catch (e: ApiException) {
+                showLoading(false)
+                showError("Google Sign In failed: ${e.statusCode}")
+            }
+        } catch (e: Exception) {
+            showLoading(false)
+            showError("Google Sign In failed: ${e.localizedMessage}")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +55,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Check if user is already logged in
         if (firebaseAuth.currentUser != null) {
             navigateToMain()
+            return
         }
 
         setupGoogleSignIn()
@@ -51,12 +65,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupGoogleSignIn() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("547698628841-nrrbthrknljb8vdh3rc6ebl110vbk7h0.apps.googleusercontent.com")
-            .requestEmail()
-            .build()
+        try {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+            googleSignInClient = GoogleSignIn.getClient(this, gso)
+        } catch (e: Exception) {
+            showError("Failed to setup Google Sign In: ${e.localizedMessage}")
+        }
     }
 
     private fun setupClickListeners() {
@@ -77,66 +95,70 @@ class LoginActivity : AppCompatActivity() {
             }
 
             googleLogin.setOnClickListener {
-                signInWithGoogle()
+                try {
+                    showLoading(true)
+                    signInWithGoogle()
+                } catch (e: Exception) {
+                    showLoading(false)
+                    showError("Failed to start Google Sign In: ${e.localizedMessage}")
+                }
             }
+
+            anonymousLogin.setOnClickListener {
+                signInAnonymously()
+            }
+
+            btnBack.setOnClickListener { finish() }
         }
     }
 
     private fun signInWithGoogle() {
-        showLoading(true)
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        googleSignInLauncher.launch(signInIntent)
     }
 
-    private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-            // Firebase Auth with Google
-            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            firebaseAuthWithCredential(credential)
-        } catch (e: ApiException) {
-            showLoading(false)
-            Toast.makeText(
-                this,
-                "Google sign in failed: ${e.message}",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    private fun firebaseAuthWithCredential(credential: AuthCredential) {
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 showLoading(false)
                 if (task.isSuccessful) {
                     navigateToMain()
                 } else {
-                    Toast.makeText(
-                        this,
-                        "Authentication failed: ${task.exception?.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showError("Authentication failed: ${task.exception?.localizedMessage}")
                 }
+            }
+            .addOnFailureListener { e ->
+                showLoading(false)
+                showError("Authentication failed: ${e.localizedMessage}")
             }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Handle Google Sign In Result
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleGoogleSignInResult(task)
-        }
+    private fun signInAnonymously() {
+        showLoading(true)
+        firebaseAuth.signInAnonymously()
+            .addOnCompleteListener(this) { task ->
+                showLoading(false)
+                if (task.isSuccessful) {
+                    navigateToMain()
+                    showError("Logged in as Guest")
+                } else {
+                    showError("Anonymous login failed: ${task.exception?.localizedMessage}")
+                }
+            }
+            .addOnFailureListener { e ->
+                showLoading(false)
+                showError("Anonymous login failed: ${e.localizedMessage}")
+            }
     }
 
     private fun validateInput(email: String, password: String): Boolean {
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            showError("Please fill all fields")
             return false
         }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+            showError("Please enter a valid email")
             return false
         }
         return true
@@ -144,31 +166,41 @@ class LoginActivity : AppCompatActivity() {
 
     private fun performLogin(email: String, password: String) {
         showLoading(true)
-
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 showLoading(false)
                 if (task.isSuccessful) {
                     navigateToMain()
                 } else {
-                    Toast.makeText(
-                        this,
-                        "Login failed: ${task.exception?.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showError("Login failed: ${task.exception?.localizedMessage}")
                 }
+            }
+            .addOnFailureListener { e ->
+                showLoading(false)
+                showError("Login failed: ${e.localizedMessage}")
             }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.loginButton.isEnabled = !isLoading
+        binding.apply {
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            loginButton.isEnabled = !isLoading
+            googleLogin.isEnabled = !isLoading
+            anonymousLogin.isEnabled = !isLoading
+            emailEditText.isEnabled = !isLoading
+            passwordEditText.isEnabled = !isLoading
+        }
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateToMain() {
         Intent(this, MainActivity::class.java).also {
             it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(it)
+            finish()
         }
     }
 }

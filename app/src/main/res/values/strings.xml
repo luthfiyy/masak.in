@@ -140,4 +140,19 @@
     <string name="free_forever_no_credit_card_needed">Free forever. No credit card needed.</string>
     <string name="sign_up">Sign Up</string>
     <string name="or_sign_up_with">Or sign up with</string>
+    <string name="please_login">Please Login</string>
+    <string name="sign_in_as_guest">sign in as guest</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+
+    <string name="guest_user">Guest User</string>
+    <string name="guest">Guest</string>
+    <string name="login_or_register">Login/Register</string>
+    <string name="guest_options">Guest Options</string>
+    <string name="login_with_email">Login with Email</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="register_new_account">Register New Account</string>
+    <string name="logout">logout</string>
+    <string name="login_to_see_favorites">login to see favorites</string>
+
 </resources>

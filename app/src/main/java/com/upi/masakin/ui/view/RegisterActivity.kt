@@ -41,9 +41,11 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.tvSignin.setOnClickListener {
-            // Navigate back to login
             finish()
         }
+
+        binding.btnBack.setOnClickListener { finish() }
+
     }
 
     private fun validateInput(

@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.upi.masakin.R
 import com.upi.masakin.adapters.recipe.IngredientAdapter
+import com.upi.masakin.databinding.FragmentIngredientsBinding
 
 class IngredientsFragment : Fragment() {
+
     companion object {
         private const val ARG_INGREDIENTS = "ingredients"
         private const val ARG_INGREDIENT_IMAGES = "ingredient_images"
@@ -20,26 +20,43 @@ class IngredientsFragment : Fragment() {
             ingredientImages: List<String>? = null
         ): IngredientsFragment {
             val fragment = IngredientsFragment()
-            val args = Bundle()
-            args.putStringArrayList(ARG_INGREDIENTS, ArrayList(ingredients))
-            ingredientImages?.let {
-                args.putStringArrayList(ARG_INGREDIENT_IMAGES, ArrayList(it))
+            val args = Bundle().apply {
+                putStringArrayList(ARG_INGREDIENTS, ArrayList(ingredients))
+                ingredientImages?.let {
+                    putStringArrayList(ARG_INGREDIENT_IMAGES, ArrayList(it))
+                }
             }
             fragment.arguments = args
             return fragment
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_ingredients, container, false)
+    private var _binding: FragmentIngredientsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentIngredientsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val ingredientsList = arguments?.getStringArrayList(ARG_INGREDIENTS) ?: emptyList()
         val ingredientImages = arguments?.getStringArrayList(ARG_INGREDIENT_IMAGES)
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.rv_ingredients)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = IngredientAdapter(ingredientsList, ingredientImages)
+        binding.rvIngredients.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = IngredientAdapter(ingredientsList, ingredientImages)
+        }
+    }
 
-        return view
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
