@@ -11,33 +11,11 @@ import com.upi.masakin.databinding.FragmentIngredientsBinding
 
 class IngredientsFragment : Fragment() {
 
-    companion object {
-        private const val ARG_INGREDIENTS = "ingredients"
-        private const val ARG_INGREDIENT_IMAGES = "ingredient_images"
-
-        fun newInstance(
-            ingredients: List<String>,
-            ingredientImages: List<String>? = null
-        ): IngredientsFragment {
-            val fragment = IngredientsFragment()
-            val args = Bundle().apply {
-                putStringArrayList(ARG_INGREDIENTS, ArrayList(ingredients))
-                ingredientImages?.let {
-                    putStringArrayList(ARG_INGREDIENT_IMAGES, ArrayList(it))
-                }
-            }
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     private var _binding: FragmentIngredientsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentIngredientsBinding.inflate(inflater, container, false)
         return binding.root
@@ -58,5 +36,24 @@ class IngredientsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val ARG_INGREDIENTS = "ingredients"
+        private const val ARG_INGREDIENT_IMAGES = "ingredient_images"
+
+        fun newInstance(
+            ingredients: List<String>, ingredientImages: List<String>? = null
+        ): IngredientsFragment {
+            val fragment = IngredientsFragment()
+            val args = Bundle().apply {
+                putStringArrayList(ARG_INGREDIENTS, ArrayList(ingredients))
+                ingredientImages?.let {
+                    putStringArrayList(ARG_INGREDIENT_IMAGES, ArrayList(it))
+                }
+            }
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

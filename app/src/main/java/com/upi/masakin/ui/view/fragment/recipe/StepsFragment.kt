@@ -13,23 +13,8 @@ class StepsFragment : Fragment() {
     private lateinit var binding: FragmentStepsBinding
     private lateinit var stepsAdapter: RecipeStepsAdapter
 
-    companion object {
-        private const val ARG_STEPS = "steps"
-
-        fun newInstance(steps: List<String>): StepsFragment {
-            val fragment = StepsFragment()
-            val args = Bundle().apply {
-                putStringArrayList(ARG_STEPS, ArrayList(steps))
-            }
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentStepsBinding.inflate(inflater, container, false)
         return binding.root
@@ -44,6 +29,19 @@ class StepsFragment : Fragment() {
         binding.stepsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = stepsAdapter
+        }
+    }
+
+    companion object {
+        private const val ARG_STEPS = "steps"
+
+        fun newInstance(steps: List<String>): StepsFragment {
+            val fragment = StepsFragment()
+            val args = Bundle().apply {
+                putStringArrayList(ARG_STEPS, ArrayList(steps))
+            }
+            fragment.arguments = args
+            return fragment
         }
     }
 }
