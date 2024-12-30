@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.upi.masakin.R
 import com.upi.masakin.databinding.ItemArticleBinding
 import com.upi.masakin.data.entities.Article
+import com.upi.masakin.utils.DiffUtilCallback
 
 class ArticleAdapter(
     private val articles: MutableList<Article>,
@@ -44,29 +45,18 @@ class ArticleAdapter(
 
     override fun getItemCount() = articles.size
 
-    inner class ArticleDiffCallback(
-        private val oldList: List<Article>,
-        private val newList: List<Article>
-    ) : DiffUtil.Callback() {
-        override fun getOldListSize(): Int = oldList.size
-        override fun getNewListSize(): Int = newList.size
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].id == newList[newItemPosition].id // Assuming `id` is the unique identifier
-        }
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
-        }
-    }
-
-
     fun updateData(newArticles: List<Article>) {
-        val diffCallback = ArticleDiffCallback(articles, newArticles)
+        val diffCallback = DiffUtilCallback(
+            oldList = articles,
+            newList = newArticles,
+            areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
+            areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
+        )
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         articles.clear()
         articles.addAll(newArticles)
         diffResult.dispatchUpdatesTo(this)
     }
-
 
     class ArticleViewHolder(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
 }
