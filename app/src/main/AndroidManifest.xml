@@ -23,7 +23,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.view.LoginActivity"
+            android:name=".ui.view.auth.LoginActivity"
             android:exported="false" />
 
         <activity
@@ -45,11 +45,11 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.view.ArticleDetailActivity"
+            android:name=".ui.view.article.ArticleDetailActivity"
             android:exported="false" />
 
         <activity
-            android:name=".ui.view.RegisterActivity"
+            android:name=".ui.view.auth.RegisterActivity"
             android:exported="false" />
 
         <meta-data

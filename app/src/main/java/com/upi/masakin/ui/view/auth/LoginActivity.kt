@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.view
+package com.upi.masakin.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -113,6 +113,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signInWithGoogle() {
+        logoutFromGoogle() // Pastikan logout terlebih dahulu sebelum login ulang
         val signInIntent = googleSignInClient.signInIntent
         googleSignInLauncher.launch(signInIntent)
     }
@@ -131,6 +132,15 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 showLoading(false)
                 showError("Authentication failed: ${e.localizedMessage}")
+            }
+    }
+
+    private fun logoutFromGoogle() {
+        googleSignInClient.signOut()
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    showError("Failed to clear Google session")
+                }
             }
     }
 

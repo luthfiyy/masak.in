@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.view
+package com.upi.masakin.ui.view.article
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

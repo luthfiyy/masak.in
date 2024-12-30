@@ -94,9 +94,9 @@ class RecipeRepository @Inject constructor(
     private fun estimateCookingTime(meal: Meal): String {
         val ingredientCount = countIngredients(meal)
         return when {
-            ingredientCount <= 5 -> "15 menit"
-            ingredientCount <= 10 -> "30 menit"
-            else -> "45 menit"
+            ingredientCount <= 5 -> "15m"
+            ingredientCount <= 10 -> "30m"
+            else -> "45m"
         }
     }
 

@@ -1,4 +1,4 @@
-package com.upi.masakin.ui.view
+package com.upi.masakin.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle

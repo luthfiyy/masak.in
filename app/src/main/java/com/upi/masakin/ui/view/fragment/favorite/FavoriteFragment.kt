@@ -114,40 +114,26 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             Log.e("FavoriteFragment", "Error getting data", exception)
         }
 
-        favoriteRecipesRef.addValueEventListener(object : ValueEventListener {
+        favoriteRecipesListener = favoriteRecipesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("FavoriteFragment", "Snapshot exists: ${snapshot.exists()}")
-                Log.d("FavoriteFragment", "Snapshot children count: ${snapshot.childrenCount}")
-                Log.d("FavoriteFragment", "Raw snapshot value: ${snapshot.value}")
-                Log.d("FavoriteFragment", "Snapshot children: ${snapshot.children.map { it.key }}")
-
                 val favoriteRecipes = mutableListOf<RecipeEntity>()
-
                 for (recipeSnapshot in snapshot.children) {
-                    try {
-                        recipeSnapshot.getValue(RecipeEntity::class.java)?.let { recipe ->
-                            Log.d("FavoriteFragment", "Recipe loaded: ${recipe.title}")
-                            favoriteRecipes.add(recipe)
-                        } ?: Log.e(
-                            "FavoriteFragment",
-                            "Failed to convert snapshot: ${recipeSnapshot.value}"
-                        )
-                    } catch (e: Exception) {
-                        Log.e("FavoriteFragment", "Error parsing recipe: ${e.message}")
-                        Log.e("FavoriteFragment", "Snapshot value: ${recipeSnapshot.value}")
+                    recipeSnapshot.getValue(RecipeEntity::class.java)?.let { recipe ->
+                        favoriteRecipes.add(recipe)
                     }
                 }
-
-                Log.d("FavoriteFragment ", "Total recipes loaded: ${favoriteRecipes.size}")
                 updateFavoriteViewVisibility(favoriteRecipes)
                 recipeAdapter.updateRecipes(favoriteRecipes)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FavoriteFragment", "Error loading favorites: ${error.message}")
-                Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                context?.let {
+                    Toast.makeText(it, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         })
+
 
     }
 

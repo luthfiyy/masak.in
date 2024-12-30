@@ -8,8 +8,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.upi.masakin.R
 import com.upi.masakin.databinding.FragmentProfileBinding
-import com.upi.masakin.ui.view.LoginActivity
-import com.upi.masakin.ui.view.RegisterActivity
+import com.upi.masakin.ui.view.auth.LoginActivity
+import com.upi.masakin.ui.view.auth.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -65,7 +65,7 @@
 
     <activity
         android:id="@+id/nav_article_detail"
-        android:name="com.upi.masakin.ui.view.ArticleDetailActivity"
+        android:name="com.upi.masakin.ui.view.article.ArticleDetailActivity"
         tools:layout="@layout/activity_chef_detail">
         <argument
             android:name="article"
