@@ -9,20 +9,17 @@ import com.upi.masakin.data.dao.ChefDao
 import com.upi.masakin.data.entities.Chef
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.data.repository.ChefRepository
+import com.upi.masakin.data.repository.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChefViewModel @Inject constructor(
     private val chefRepository: ChefRepository,
+    private val recipeRepository: RecipeRepository,
     private val dispatcher: CoroutineDispatcher,
     private val context: Application,
     private val chefDao: ChefDao
@@ -31,38 +28,69 @@ class ChefViewModel @Inject constructor(
     private val _chefs = MutableStateFlow<List<Chef>>(emptyList())
     val chefs: StateFlow<List<Chef>> = _chefs.asStateFlow()
 
-    private val _recipesByChef = MutableStateFlow<List<RecipeEntity>>(emptyList())
+    private val _recipesByChef = MutableStateFlow<Map<Int, List<RecipeEntity>>>(emptyMap())
 
-    // Error handling state flow
-    private val _error = MutableStateFlow<String?>(null)
-
-    // Function to get recipes for a specific chef
-    fun getRecipesByChefId(chefId: Int): Flow<List<RecipeEntity>> {
-        return flow {
-            try {
-                val recipes = chefDao.getRecipesByChefId(chefId)
-                emit(recipes)
-                _recipesByChef.value = recipes
-            } catch (e: Exception) {
-                Log.e("ChefViewModel", "Error getting recipes for chef $chefId", e)
-                _error.value = "Failed to retrieve recipes for chef"
-                emit(emptyList())
-            }
-        }.flowOn(dispatcher)
+    // UI state handling
+    sealed class UiState {
+        data object Loading : UiState()
+        data class Success(val data: List<RecipeEntity>) : UiState()
+        data class Error(val message: String) : UiState()
     }
 
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+
     init {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
+            initializeData()
+        }
+    }
+
+    private suspend fun initializeData() {
+        try {
             val chefsInDatabase = chefRepository.getAllChefs()
             if (chefsInDatabase.isEmpty()) {
                 insertSampleChefs()
             }
             fetchChefs()
+            prefetchAllRecipes()
+        } catch (e: Exception) {
+            Log.e("ChefViewModel", "Error initializing data", e)
+            _uiState.value = UiState.Error("Failed to initialize data")
         }
     }
 
+    fun getRecipesByChefId(chefId: Int): Flow<List<RecipeEntity>> = flow {
+        _uiState.value = UiState.Loading
+        try {
+            // First try to get from cached map
+            _recipesByChef.value[chefId]?.let {
+                emit(it)
+                _uiState.value = UiState.Success(it)
+                return@flow
+            }
 
-    // Fetch all chefs from the repository
+            // If not in cache, fetch from database
+            val recipes = chefDao.getRecipesByChefId(chefId)
+            if (recipes.isNotEmpty()) {
+                emit(recipes)
+                // Update cache
+                _recipesByChef.value += (chefId to recipes)
+                _uiState.value = UiState.Success(recipes)
+            } else {
+                // If no recipes in database, fetch from repository
+                val apiRecipes = recipeRepository.fetchRecipesFromApi("").filter { it.chefId == chefId }
+                emit(apiRecipes)
+                // Update cache
+                _recipesByChef.value += (chefId to apiRecipes)
+                _uiState.value = UiState.Success(apiRecipes)
+            }
+        } catch (e: Exception) {
+            Log.e("ChefViewModel", "Error getting recipes for chef $chefId", e)
+            _uiState.value = UiState.Error("Failed to retrieve recipes for chef")
+            emit(emptyList())
+        }
+    }.flowOn(dispatcher)
+
     private fun fetchChefs() {
         viewModelScope.launch(dispatcher) {
             try {
@@ -71,41 +99,48 @@ class ChefViewModel @Inject constructor(
                 Log.d("ChefViewModel", "Fetched chefs: ${fetchedChefs.size}")
             } catch (e: Exception) {
                 Log.e("ChefViewModel", "Error fetching chefs", e)
-                _error.value = "Failed to retrieve chef data"
+                _uiState.value = UiState.Error("Failed to retrieve chef data")
             }
         }
     }
 
-
-    // Insert sample chefs into the repository
-    private fun insertSampleChefs() {
-        viewModelScope.launch(dispatcher) {
-            val sampleChefs = listOf(
-                Chef(
-                    name = "Chef A",
-                    description = context.getString(R.string.contoh_desk_chef),
-                    image = R.drawable.img_chef1
-                ),
-                Chef(
-                    name = "Chef B",
-                    description = context.getString(R.string.contoh_desk_chef),
-                    image = R.drawable.img_chef2
-                ),
-                Chef(
-                    name = "Chef C",
-                    description = context.getString(R.string.contoh_desk_chef),
-                    image = R.drawable.img_chef3
-                ),
-                Chef(
-                    name = "Chef D",
-                    description = context.getString(R.string.contoh_desk_chef),
-                    image = R.drawable.img_chef4
-                )
-            )
-
-            // Use a single insert call instead of iterating
-            chefRepository.insertChef(sampleChefs)
+    private suspend fun prefetchAllRecipes() {
+        _chefs.value.forEach { chef ->
+            try {
+                val recipes = chefDao.getRecipesByChefId(chef.id)
+                if (recipes.isNotEmpty()) {
+                    _recipesByChef.value += (chef.id to recipes)
+                }
+            } catch (e: Exception) {
+                Log.e("ChefViewModel", "Error prefetching recipes for chef ${chef.id}", e)
+            }
         }
+    }
+
+    private suspend fun insertSampleChefs() {
+        val sampleChefs = listOf(
+            Chef(
+                name = "Chef A",
+                description = context.getString(R.string.contoh_desk_chef),
+                image = R.drawable.img_chef1
+            ),
+            Chef(
+                name = "Chef B",
+                description = context.getString(R.string.contoh_desk_chef),
+                image = R.drawable.img_chef2
+            ),
+            Chef(
+                name = "Chef C",
+                description = context.getString(R.string.contoh_desk_chef),
+                image = R.drawable.img_chef3
+            ),
+            Chef(
+                name = "Chef D",
+                description = context.getString(R.string.contoh_desk_chef),
+                image = R.drawable.img_chef4
+            )
+        )
+        chefRepository.insertChef(sampleChefs)
     }
 
     fun debugChefRecipes() {
