@@ -1,8 +1,11 @@
 package com.upi.masakin.data.repository
 
 import android.content.Context
-import com.upi.masakin.data.api.MealApiService
+import com.upi.masakin.data.api.recipe.MealApiService
 import com.upi.masakin.data.dao.ChefDao
+import com.upi.masakin.data.repository.chef.ChefRepository
+import com.upi.masakin.data.repository.chef.ChefRepositoryImpl
+import com.upi.masakin.data.repository.recipe.RecipeRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

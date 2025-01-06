@@ -1,4 +1,4 @@
-package com.upi.masakin.data.repository
+package com.upi.masakin.data.repository.chef
 
 import com.upi.masakin.data.entities.Chef
 import com.upi.masakin.data.entities.RecipeEntity

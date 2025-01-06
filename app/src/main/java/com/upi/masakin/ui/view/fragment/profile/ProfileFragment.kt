@@ -18,6 +18,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private var isFakeStoreUser = false
+    private var fakeStoreUsername: String? = null
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
@@ -26,7 +28,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentProfileBinding.bind(view)
 
-        if (firebaseAuth.currentUser == null) {
+        activity?.intent?.let { intent ->
+            isFakeStoreUser = intent.getBooleanExtra("IS_FAKESTORE_USER", false)
+            fakeStoreUsername = intent.getStringExtra("FAKESTORE_USERNAME")
+        }
+
+        if (!isFakeStoreUser && firebaseAuth.currentUser == null) {
             navigateToLoginScreen()
             return
         }
@@ -51,15 +58,32 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val currentUser = firebaseAuth.currentUser
 
         when {
+            isFakeStoreUser -> {
+                handleFakeStoreUser()
+            }
+
             currentUser == null -> {
                 handleNotLoggedInUser()
             }
+
             currentUser.isAnonymous -> {
                 handleAnonymousUser()
             }
+
             else -> {
                 handleRegularUser(currentUser)
             }
+        }
+    }
+
+    private fun handleFakeStoreUser() {
+        binding.apply {
+            tvEmail.text = fakeStoreUsername
+            tvName.text = fakeStoreUsername ?: getString(R.string.name)
+            emailCard.visibility = View.GONE
+            btnEditProfile.visibility = View.VISIBLE
+            btnSettings.text = getString(R.string.settings)
+            btnSettings.setOnClickListener { showSettingsOptions() }
         }
     }
 

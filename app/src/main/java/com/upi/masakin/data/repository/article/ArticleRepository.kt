@@ -1,4 +1,4 @@
-package com.upi.masakin.data.repository
+package com.upi.masakin.data.repository.article
 
 import com.upi.masakin.data.dao.ArticleDao
 import com.upi.masakin.data.entities.Article

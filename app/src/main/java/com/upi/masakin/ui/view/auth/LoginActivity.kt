@@ -2,10 +2,12 @@ package com.upi.masakin.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -13,9 +15,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.upi.masakin.R
+import com.upi.masakin.data.api.auth.FakeStoreApi
+import com.upi.masakin.data.api.auth.LoginRequest
 import com.upi.masakin.databinding.ActivityLoginBinding
 import com.upi.masakin.ui.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,9 +28,14 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var googleSignInClient: GoogleSignInClient
+    private var isFakeStoreUser: Boolean = false
+    private var fakeStoreUsername: String? = null
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
+
+    @Inject
+    lateinit var fakeStoreApi: FakeStoreApi
 
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -79,10 +89,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.apply {
-            loginButton.setOnClickListener {
-                val email = emailEditText.text.toString()
-                val password = passwordEditText.text.toString()
-
+           loginButton.setOnClickListener {
+                val email = binding.emailEditText.text.toString()
+                val password = binding.passwordEditText.text.toString()
                 if (validateInput(email, password)) {
                     performLogin(email, password)
                 }
@@ -167,28 +176,68 @@ class LoginActivity : AppCompatActivity() {
             showError("Please fill all fields")
             return false
         }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showError("Please enter a valid email")
-            return false
-        }
         return true
     }
 
-    private fun performLogin(email: String, password: String) {
+
+    private fun performLogin(emailOrUsername: String, password: String) {
         showLoading(true)
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                showLoading(false)
-                if (task.isSuccessful) {
-                    navigateToMain()
-                } else {
-                    showError("Login failed: ${task.exception?.localizedMessage}")
+
+        // First try Firebase login if input matches email format
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailOrUsername).matches()) {
+            firebaseAuth.signInWithEmailAndPassword(emailOrUsername, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        navigateToMain()
+                    } else {
+                        // If Firebase login fails, try FakeStore API
+                        loginWithFakeStoreApi(emailOrUsername, password)
+                    }
                 }
-            }
-            .addOnFailureListener { e ->
+                .addOnFailureListener { e ->
+                    showLoading(false)
+                    showError("Firebase Login failed: ${e.localizedMessage}")
+                }
+        } else {
+            // If input is not an email, try FakeStore API directly
+            loginWithFakeStoreApi(emailOrUsername, password)
+        }
+    }
+
+    private fun loginWithFakeStoreApi(emailOrUsername: String, password: String) {
+        lifecycleScope.launch {
+            try {
+                showLoading(true)
+                val response = fakeStoreApi.login(LoginRequest(emailOrUsername, password))
+
+                if (response.isSuccessful) {
+                    val loginResponse = response.body()
+
+                    if (loginResponse?.token?.isNotEmpty() == true) {
+                        isFakeStoreUser = true
+                        fakeStoreUsername = loginResponse.username
+                        showLoading(false)
+
+                        // Pass the username to MainActivity
+                        navigateToMain(loginResponse.username)
+                        showError("Login successful with FakeStore API")
+                    } else {
+                        showLoading(false)
+                        showError("Login failed: No token or username received")
+                        Log.d("FakeStoreResponse", "Response Body: ${response.body()}")
+                        Log.e("FakeStoreLogin", "Login failed: No token or username in response")
+                    }
+                } else {
+                    showLoading(false)
+                    showError("Login failed: ${response.message()}")
+                    Log.e("FakeStoreLogin", "Login failed: HTTP ${response.code()} - ${response.message()}")
+                }
+            } catch (e: Exception) {
                 showLoading(false)
-                showError("Login failed: ${e.localizedMessage}")
+                showError("Error: ${e.localizedMessage}")
+                Log.e("FakeStoreLogin", "Exception occurred: ${e.localizedMessage}", e)
             }
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -206,9 +255,13 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun navigateToMain() {
+    private fun navigateToMain(username: String? = null) {
         Intent(this, MainActivity::class.java).also {
             it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            username?.let { name ->
+                it.putExtra("FAKESTORE_USERNAME", name)
+                it.putExtra("IS_FAKESTORE_USER", true)
+            }
             startActivity(it)
             finish()
         }

@@ -1,9 +1,8 @@
-package com.upi.masakin.data.repository
+package com.upi.masakin.data.repository.recipe
 
 import android.content.Context
-import com.upi.masakin.R
-import com.upi.masakin.data.api.Meal
-import com.upi.masakin.data.api.MealApiService
+import com.upi.masakin.data.api.recipe.Meal
+import com.upi.masakin.data.api.recipe.MealApiService
 import com.upi.masakin.data.entities.RecipeEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

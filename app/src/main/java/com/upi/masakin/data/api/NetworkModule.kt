@@ -1,6 +1,8 @@
 package com.upi.masakin.data.api
 
 import com.google.firebase.auth.FirebaseAuth
+import com.upi.masakin.data.api.auth.FakeStoreApi
+import com.upi.masakin.data.api.recipe.MealApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +28,14 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideFakeStoreApi(): FakeStoreApi {
+        return Retrofit.Builder()
+            .baseUrl("https://fakestoreapi.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(FakeStoreApi::class.java)
+    }
 }

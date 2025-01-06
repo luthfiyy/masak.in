@@ -3,7 +3,7 @@ package com.upi.masakin.ui.viewmodel.recipe
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upi.masakin.data.entities.RecipeEntity
-import com.upi.masakin.data.repository.RecipeRepository
+import com.upi.masakin.data.repository.recipe.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

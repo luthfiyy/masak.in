@@ -8,8 +8,8 @@ import com.upi.masakin.R
 import com.upi.masakin.data.dao.ChefDao
 import com.upi.masakin.data.entities.Chef
 import com.upi.masakin.data.entities.RecipeEntity
-import com.upi.masakin.data.repository.ChefRepository
-import com.upi.masakin.data.repository.RecipeRepository
+import com.upi.masakin.data.repository.chef.ChefRepository
+import com.upi.masakin.data.repository.recipe.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*

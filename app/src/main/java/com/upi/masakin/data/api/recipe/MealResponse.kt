@@ -1,4 +1,4 @@
-package com.upi.masakin.data.api
+package com.upi.masakin.data.api.recipe
 
 data class MealResponse(
     val meals: List<Meal>?

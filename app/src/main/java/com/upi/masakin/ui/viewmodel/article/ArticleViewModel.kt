@@ -2,7 +2,7 @@ package com.upi.masakin.ui.viewmodel.article
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.upi.masakin.data.repository.ArticleRepository
+import com.upi.masakin.data.repository.article.ArticleRepository
 import com.upi.masakin.data.entities.Article
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
