@@ -2,7 +2,6 @@ package com.upi.masakin.ui.view.fragment.favorite
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -25,6 +24,7 @@ import com.upi.masakin.R
 import com.upi.masakin.adapters.recipe.ListRecipeAdapter
 import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.FragmentFavoriteBinding
+import timber.log.Timber
 
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private var _binding: FragmentFavoriteBinding? = null
@@ -87,7 +87,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private fun loadFavoriteRecipes() {
         val currentUser = FirebaseAuth.getInstance().currentUser
-        Log.d(
+        Timber.d(
             "FavoriteFragment",
             "Current user: ${currentUser?.uid}, isAnonymous: ${currentUser?.isAnonymous}"
         )
@@ -101,17 +101,17 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         val database =
             FirebaseDatabase.getInstance("https://masakin-76b91-default-rtdb.asia-southeast1.firebasedatabase.app")
         val path = "users/${currentUser.uid}/favorite_recipes"
-        Log.d("FavoriteFragment", "Attempting to load from path: $path")
+        Timber.d("Attempting to load from path: $path")
         val favoriteRecipesRef = database.getReference(path)
-        Log.d("FavoriteFragment", "Database Reference: ${favoriteRecipesRef.ref}")
+        Timber.d("Database Reference: ${favoriteRecipesRef.ref}")
 
 
         // Add immediate value check
         favoriteRecipesRef.get().addOnSuccessListener { snapshot ->
-            Log.d("FavoriteFragment", "Direct snapshot check - exists: ${snapshot.exists()}")
-            Log.d("FavoriteFragment", "Direct snapshot check - value: ${snapshot.value}")
+            Timber.d("Direct snapshot check - exists: ${snapshot.exists()}")
+            Timber.d("Direct snapshot check - value: ${snapshot.value}")
         }.addOnFailureListener { exception ->
-            Log.e("FavoriteFragment", "Error getting data", exception)
+            Timber.e("Error getting data", exception)
         }
 
         favoriteRecipesListener = favoriteRecipesRef.addValueEventListener(object : ValueEventListener {
@@ -127,7 +127,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("FavoriteFragment", "Error loading favorites: ${error.message}")
+                Timber.e("Error loading favorites: ${error.message}")
                 context?.let {
                     Toast.makeText(it, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
                 }

@@ -3,7 +3,6 @@ package com.upi.masakin.ui.view.recipe
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -31,6 +30,7 @@ import com.upi.masakin.data.entities.RecipeEntity
 import com.upi.masakin.databinding.ActivityRecipeDetailBinding
 import com.upi.masakin.ui.view.fragment.recipe.IngredientsFragment
 import com.upi.masakin.ui.view.fragment.recipe.StepsFragment
+import timber.log.Timber
 
 class RecipeDetailActivity : AppCompatActivity() {
     private var recipeTitle: String? = null
@@ -145,12 +145,12 @@ class RecipeDetailActivity : AppCompatActivity() {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
         // Debug user state
-        Log.d("RecipeDebug", "=== User Debug ===")
-        Log.d("RecipeDebug", "Current user: ${currentUser?.uid}")
-        Log.d("RecipeDebug", "Is anonymous: ${currentUser?.isAnonymous}")
+        Timber.d( "=== User Debug ===")
+        Timber.d( "Current user: ${currentUser?.uid}")
+        Timber.d( "Is anonymous: ${currentUser?.isAnonymous}")
 
         if (currentUser == null || currentUser.isAnonymous) {
-            Log.d("RecipeDebug", "User not logged in or anonymous")
+            Timber.d( "User not logged in or anonymous")
             binding.fabLike.setOnClickListener {
                 Toast.makeText(
                     this@RecipeDetailActivity,
@@ -167,53 +167,53 @@ class RecipeDetailActivity : AppCompatActivity() {
         val favoriteRecipesRef = database.getReference("users/$userId/favorite_recipes/${recipe.id}")
 
         // Debug database reference
-        Log.d("RecipeDebug", "=== Database Reference Debug ===")
-        Log.d("RecipeDebug", "Reference path: ${favoriteRecipesRef.path}")
-        Log.d("RecipeDebug", "Recipe ID: ${recipe.id}")
+        Timber.d( "=== Database Reference Debug ===")
+        Timber.d( "Reference path: ${favoriteRecipesRef.path}")
+        Timber.d( "Recipe ID: ${recipe.id}")
 
         database.getReference(path).get()
             .addOnSuccessListener { snapshot ->
-                Log.d("FavoriteDebug", "Raw data at path: $path")
-                Log.d("FavoriteDebug", "Snapshot exists: ${snapshot.exists()}")
-                Log.d("FavoriteDebug", "Snapshot value: ${snapshot.value}")
-                Log.d("FavoriteDebug", "Children count: ${snapshot.childrenCount}")
+                Timber.d("Raw data at path: $path")
+                Timber.d("Snapshot exists: ${snapshot.exists()}")
+                Timber.d("Snapshot value: ${snapshot.value}")
+                Timber.d("Children count: ${snapshot.childrenCount}")
                 snapshot.children.forEach { child ->
-                    Log.d("FavoriteDebug", "Child key: ${child.key}")
-                    Log.d("FavoriteDebug", "Child value: ${child.value}")
+                    Timber.d("Child key: ${child.key}")
+                    Timber.d("Child value: ${child.value}")
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("FavoriteDebug", "Failed to read data: ${e.message}")
+                Timber.e("Failed to read data: ${e.message}")
             }
 
         favoriteRecipesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 // Debug snapshot
-                Log.d("RecipeDebug", "=== Like Status Debug ===")
-                Log.d("RecipeDebug", "Snapshot exists: ${snapshot.exists()}")
-                Log.d("RecipeDebug", "Snapshot value: ${snapshot.value}")
+                Timber.d( "=== Like Status Debug ===")
+                Timber.d( "Snapshot exists: ${snapshot.exists()}")
+                Timber.d( "Snapshot value: ${snapshot.value}")
 
                 isLiked = snapshot.exists()
                 updateLikeButtonState()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("RecipeDebug", "=== Error Debug ===")
-                Log.e("RecipeDebug", "Error checking favorite status: ${error.message}")
-                Log.e("RecipeDebug", "Error details: ${error.details}")
+                Timber.e( "=== Error Debug ===")
+                Timber.e( "Error checking favorite status: ${error.message}")
+                Timber.e( "Error details: ${error.details}")
             }
         })
 
         binding.fabLike.setOnClickListener {
             // Debug like action
-            Log.d("RecipeDebug", "=== Like Action Debug ===")
-            Log.d("RecipeDebug", "Current like status: $isLiked")
-            Log.d("RecipeDebug", "Recipe to save: ${recipe.title}")
+            Timber.d( "=== Like Action Debug ===")
+            Timber.d( "Current like status: $isLiked")
+            Timber.d( "Recipe to save: ${recipe.title}")
 
             if (isLiked) {
                 favoriteRecipesRef.removeValue()
                     .addOnSuccessListener {
-                        Log.d("RecipeDebug", "Successfully removed from favorites")
+                        Timber.d( "Successfully removed from favorites")
                         isLiked = false
                         updateLikeButtonState()
                         Toast.makeText(
@@ -223,7 +223,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                         ).show()
                     }
                     .addOnFailureListener { e ->
-                        Log.e("RecipeDebug", "Error removing from favorites", e)
+                        Timber.e( "Error removing from favorites", e)
                         Toast.makeText(
                             this@RecipeDetailActivity,
                             "Error: ${e.message}",
@@ -236,7 +236,7 @@ class RecipeDetailActivity : AppCompatActivity() {
 
             favoriteRecipesRef.setValue(recipeToSave)
                 .addOnSuccessListener {
-                    Log.d("RecipeDebug", "Successfully added to favorites")
+                    Timber.d( "Successfully added to favorites")
                     isLiked = true
                     updateLikeButtonState()
                     Toast.makeText(
@@ -246,7 +246,7 @@ class RecipeDetailActivity : AppCompatActivity() {
                     ).show()
                 }
                 .addOnFailureListener { e ->
-                    Log.e("RecipeDebug", "Error adding to favorites", e)
+                    Timber.e( "Error adding to favorites", e)
                     Toast.makeText(
                         this@RecipeDetailActivity,
                         "Error: ${e.message}",

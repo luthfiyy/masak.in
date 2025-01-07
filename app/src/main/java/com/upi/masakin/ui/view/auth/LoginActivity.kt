@@ -2,7 +2,6 @@ package com.upi.masakin.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +20,7 @@ import com.upi.masakin.databinding.ActivityLoginBinding
 import com.upi.masakin.ui.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -224,18 +224,18 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         showLoading(false)
                         showError("Login failed: No token or username received")
-                        Log.d("FakeStoreResponse", "Response Body: ${response.body()}")
-                        Log.e("FakeStoreLogin", "Login failed: No token or username in response")
+                        Timber.d( "Response Body: ${response.body()}")
+                        Timber.e("Login failed: No token or username in response")
                     }
                 } else {
                     showLoading(false)
                     showError("Login failed: ${response.message()}")
-                    Log.e("FakeStoreLogin", "Login failed: HTTP ${response.code()} - ${response.message()}")
+                    Timber.e( "Login failed: HTTP ${response.code()} - ${response.message()}")
                 }
             } catch (e: Exception) {
                 showLoading(false)
                 showError("Error: ${e.localizedMessage}")
-                Log.e("FakeStoreLogin", "Exception occurred: ${e.localizedMessage}", e)
+                Timber.e( "Exception occurred: ${e.localizedMessage}", e)
             }
         }
     }

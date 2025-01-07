@@ -1,7 +1,6 @@
 package com.upi.masakin.ui.viewmodel.chef
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upi.masakin.R
@@ -14,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,7 +54,7 @@ class ChefViewModel @Inject constructor(
             fetchChefs()
             prefetchAllRecipes()
         } catch (e: Exception) {
-            Log.e("ChefViewModel", "Error initializing data", e)
+            Timber.e("Error initializing data", e)
             _uiState.value = UiState.Error("Failed to initialize data")
         }
     }
@@ -85,7 +85,7 @@ class ChefViewModel @Inject constructor(
                 _uiState.value = UiState.Success(apiRecipes)
             }
         } catch (e: Exception) {
-            Log.e("ChefViewModel", "Error getting recipes for chef $chefId", e)
+            Timber.e("Error getting recipes for chef $chefId", e)
             _uiState.value = UiState.Error("Failed to retrieve recipes for chef")
             emit(emptyList())
         }
@@ -96,9 +96,9 @@ class ChefViewModel @Inject constructor(
             try {
                 val fetchedChefs = chefRepository.getAllChefs()
                 _chefs.value = fetchedChefs
-                Log.d("ChefViewModel", "Fetched chefs: ${fetchedChefs.size}")
+                Timber.d("Fetched chefs: ${fetchedChefs.size}")
             } catch (e: Exception) {
-                Log.e("ChefViewModel", "Error fetching chefs", e)
+                Timber.e("Error fetching chefs", e)
                 _uiState.value = UiState.Error("Failed to retrieve chef data")
             }
         }
@@ -112,7 +112,7 @@ class ChefViewModel @Inject constructor(
                     _recipesByChef.value += (chef.id to recipes)
                 }
             } catch (e: Exception) {
-                Log.e("ChefViewModel", "Error prefetching recipes for chef ${chef.id}", e)
+                Timber.e("Error prefetching recipes for chef ${chef.id}", e)
             }
         }
     }
@@ -148,9 +148,9 @@ class ChefViewModel @Inject constructor(
             val allChefs = chefRepository.getAllChefs()
             allChefs.forEach { chef ->
                 val recipes = chefDao.getRecipesByChefId(chef.id)
-                Log.d("ChefViewModel", "Chef ${chef.name} (ID: ${chef.id}) has ${recipes.size} recipes")
+                Timber.d("Chef ${chef.name} (ID: ${chef.id}) has ${recipes.size} recipes")
                 recipes.forEach { recipe ->
-                    Log.d("ChefViewModel", "Recipe: ${recipe.title}, ChefId: ${recipe.chefId}")
+                    Timber.d("Recipe: ${recipe.title}, ChefId: ${recipe.chefId}")
                 }
             }
         }

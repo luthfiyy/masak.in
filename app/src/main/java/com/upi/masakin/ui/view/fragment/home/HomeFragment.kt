@@ -1,7 +1,6 @@
 package com.upi.masakin.ui.view.fragment.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -25,6 +24,7 @@ import com.upi.masakin.ui.viewmodel.chef.ChefViewModel
 import com.upi.masakin.ui.viewmodel.recipe.RecipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             chefViewModel.chefs.collect { chefs ->
                 if (chefs.isEmpty()) {
-                    Log.w("HomeFragment", "No chefs found")
+                    Timber.w("No chefs found")
                 } else {
                     listChefAdapter = ListChefAdapter(chefs) { chef ->
                         val action = HomeFragmentDirections.actionHomeToChefDetail(chef)

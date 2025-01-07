@@ -2,7 +2,6 @@ package com.upi.masakin.ui.view.chef
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +16,7 @@ import com.upi.masakin.ui.view.recipe.RecipeDetailActivity
 import com.upi.masakin.ui.viewmodel.chef.ChefViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ChefDetailActivity : AppCompatActivity() {
@@ -63,12 +63,12 @@ class ChefDetailActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 chefViewModel.getRecipesByChefId(chefId)
                     .collect { recipes ->
-                        Log.d("ChefDetailActivity", "Recipes received: ${recipes.size}")
+                        Timber.d("Recipes received: ${recipes.size}")
                         recipeAdapter.updateRecipes(recipes)
 
                         // Add this to check if the list is empty
                         if (recipes.isEmpty()) {
-                            Log.e("ChefDetailActivity", "No recipes found for chef ID: $chefId")
+                            Timber.e("No recipes found for chef ID: $chefId")
                             // Optionally, show an empty state view
                             binding.tvNoRecipes.visibility = View.VISIBLE
                         } else {
