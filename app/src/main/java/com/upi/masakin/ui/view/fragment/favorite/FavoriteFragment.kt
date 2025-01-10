@@ -86,33 +86,30 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     }
 
     private fun loadFavoriteRecipes() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        Timber.d(
-            "FavoriteFragment",
-            "Current user: ${currentUser?.uid}, isAnonymous: ${currentUser?.isAnonymous}"
-        )
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+        val isFakestoreLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
+        val fakestoreUserId = sharedPreferences.getString("user_id", null)
 
-        if (currentUser == null || currentUser.isAnonymous) {
+        if ((firebaseUser == null || firebaseUser.isAnonymous) && (!isFakestoreLoggedIn || fakestoreUserId == null)) {
             updateFavoriteViewVisibility(emptyList())
             binding.emptyText.text = getString(R.string.login_to_see_favorites)
             return
         }
 
-        val database =
-            FirebaseDatabase.getInstance("https://masakin-76b91-default-rtdb.asia-southeast1.firebasedatabase.app")
-        val path = "users/${currentUser.uid}/favorite_recipes"
-        Timber.d("Attempting to load from path: $path")
-        val favoriteRecipesRef = database.getReference(path)
-        Timber.d("Database Reference: ${favoriteRecipesRef.ref}")
-
-
-        // Add immediate value check
-        favoriteRecipesRef.get().addOnSuccessListener { snapshot ->
-            Timber.d("Direct snapshot check - exists: ${snapshot.exists()}")
-            Timber.d("Direct snapshot check - value: ${snapshot.value}")
-        }.addOnFailureListener { exception ->
-            Timber.e("Error getting data", exception)
+        // Load Firebase favorites
+        if (firebaseUser != null && !firebaseUser.isAnonymous) {
+            loadFirebaseFavorites(firebaseUser.uid)
         }
+        // Load Fakestore favorites
+        else if (isFakestoreLoggedIn && fakestoreUserId != null) {
+            loadFakestoreFavorites(fakestoreUserId)
+        }
+    }
+
+    private fun loadFirebaseFavorites(userId: String) {
+        val database = FirebaseDatabase.getInstance("https://masakin-76b91-default-rtdb.asia-southeast1.firebasedatabase.app")
+        val favoriteRecipesRef = database.getReference("users/$userId/favorite_recipes")
 
         favoriteRecipesListener = favoriteRecipesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -133,10 +130,30 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                 }
             }
         })
-
-
     }
 
+    private fun loadFakestoreFavorites(userId: String) {
+        val favoritesPrefs = requireContext().getSharedPreferences("favorite_recipes_$userId", AppCompatActivity.MODE_PRIVATE)
+        val recipesPrefs = requireContext().getSharedPreferences("recipes_data_$userId", AppCompatActivity.MODE_PRIVATE)
+        val favoriteRecipes = mutableListOf<RecipeEntity>()
+
+        favoritesPrefs.all.forEach { (recipeId, isFavorite) ->
+            if (isFavorite as Boolean) {
+                val recipeJson = recipesPrefs.getString(recipeId, null)
+                if (recipeJson != null) {
+                    try {
+                        val recipe = Gson().fromJson(recipeJson, RecipeEntity::class.java)
+                        favoriteRecipes.add(recipe)
+                    } catch (e: Exception) {
+                        Timber.e("Error parsing recipe: $e")
+                    }
+                }
+            }
+        }
+
+        updateFavoriteViewVisibility(favoriteRecipes)
+        recipeAdapter.updateRecipes(favoriteRecipes)
+    }
     private fun updateFavoriteViewVisibility(favoriteRecipes: List<RecipeEntity>) {
         _binding?.apply {
             if (favoriteRecipes.isEmpty()) {

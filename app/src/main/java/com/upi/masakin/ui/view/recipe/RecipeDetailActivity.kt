@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.upi.masakin.R
@@ -140,17 +141,14 @@ class RecipeDetailActivity : AppCompatActivity() {
         }.attach()
     }
 
-    // Di RecipeDetailActivity, tambahkan logging di setupLikeButton:
     private fun setupLikeButton(recipe: RecipeEntity) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val isFakestoreLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
+        val fakestoreUserId = sharedPreferences.getString("user_id", null)
 
-        // Debug user state
-        Timber.d( "=== User Debug ===")
-        Timber.d( "Current user: ${currentUser?.uid}")
-        Timber.d( "Is anonymous: ${currentUser?.isAnonymous}")
-
-        if (currentUser == null || currentUser.isAnonymous) {
-            Timber.d( "User not logged in or anonymous")
+        if ((firebaseUser == null || firebaseUser.isAnonymous) && (!isFakestoreLoggedIn || fakestoreUserId == null)) {
+            Timber.d("No user logged in")
             binding.fabLike.setOnClickListener {
                 Toast.makeText(
                     this@RecipeDetailActivity,
@@ -161,59 +159,35 @@ class RecipeDetailActivity : AppCompatActivity() {
             return
         }
 
+        // Handle Firebase user
+        if (firebaseUser != null && !firebaseUser.isAnonymous) {
+            setupFirebaseLike(recipe, firebaseUser.uid)
+        }
+        // Handle Fakestore user
+        else if (isFakestoreLoggedIn && fakestoreUserId != null) {
+            setupFakestoreLike(recipe, fakestoreUserId)
+        }
+    }
+
+    private fun setupFirebaseLike(recipe: RecipeEntity, userId: String) {
         val database = FirebaseDatabase.getInstance("https://masakin-76b91-default-rtdb.asia-southeast1.firebasedatabase.app")
-        val path = "users/${currentUser.uid}/favorite_recipes"
-        val userId = currentUser.uid
         val favoriteRecipesRef = database.getReference("users/$userId/favorite_recipes/${recipe.id}")
-
-        // Debug database reference
-        Timber.d( "=== Database Reference Debug ===")
-        Timber.d( "Reference path: ${favoriteRecipesRef.path}")
-        Timber.d( "Recipe ID: ${recipe.id}")
-
-        database.getReference(path).get()
-            .addOnSuccessListener { snapshot ->
-                Timber.d("Raw data at path: $path")
-                Timber.d("Snapshot exists: ${snapshot.exists()}")
-                Timber.d("Snapshot value: ${snapshot.value}")
-                Timber.d("Children count: ${snapshot.childrenCount}")
-                snapshot.children.forEach { child ->
-                    Timber.d("Child key: ${child.key}")
-                    Timber.d("Child value: ${child.value}")
-                }
-            }
-            .addOnFailureListener { e ->
-                Timber.e("Failed to read data: ${e.message}")
-            }
 
         favoriteRecipesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // Debug snapshot
-                Timber.d( "=== Like Status Debug ===")
-                Timber.d( "Snapshot exists: ${snapshot.exists()}")
-                Timber.d( "Snapshot value: ${snapshot.value}")
-
                 isLiked = snapshot.exists()
                 updateLikeButtonState()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Timber.e( "=== Error Debug ===")
-                Timber.e( "Error checking favorite status: ${error.message}")
-                Timber.e( "Error details: ${error.details}")
+                Timber.e("Error checking favorite status: ${error.message}")
             }
         })
 
         binding.fabLike.setOnClickListener {
-            // Debug like action
-            Timber.d( "=== Like Action Debug ===")
-            Timber.d( "Current like status: $isLiked")
-            Timber.d( "Recipe to save: ${recipe.title}")
-
             if (isLiked) {
                 favoriteRecipesRef.removeValue()
                     .addOnSuccessListener {
-                        Timber.d( "Successfully removed from favorites")
                         isLiked = false
                         updateLikeButtonState()
                         Toast.makeText(
@@ -223,7 +197,6 @@ class RecipeDetailActivity : AppCompatActivity() {
                         ).show()
                     }
                     .addOnFailureListener { e ->
-                        Timber.e( "Error removing from favorites", e)
                         Toast.makeText(
                             this@RecipeDetailActivity,
                             "Error: ${e.message}",
@@ -231,32 +204,56 @@ class RecipeDetailActivity : AppCompatActivity() {
                         ).show()
                     }
             } else {
-            // Buat salinan resep dengan favorite = true
-            val recipeToSave = recipe.copy(isFavorite = true)
-
-            favoriteRecipesRef.setValue(recipeToSave)
-                .addOnSuccessListener {
-                    Timber.d( "Successfully added to favorites")
-                    isLiked = true
-                    updateLikeButtonState()
-                    Toast.makeText(
-                        this@RecipeDetailActivity,
-                        "Added to favorites",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                .addOnFailureListener { e ->
-                    Timber.e( "Error adding to favorites", e)
-                    Toast.makeText(
-                        this@RecipeDetailActivity,
-                        "Error: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-        }
+                val recipeToSave = recipe.copy(isFavorite = true)
+                favoriteRecipesRef.setValue(recipeToSave)
+                    .addOnSuccessListener {
+                        isLiked = true
+                        updateLikeButtonState()
+                        Toast.makeText(
+                            this@RecipeDetailActivity,
+                            "Added to favorites",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            this@RecipeDetailActivity,
+                            "Error: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }
         }
     }
 
+    private fun setupFakestoreLike(recipe: RecipeEntity, userId: String) {
+        val favoritesPrefs = getSharedPreferences("favorite_recipes_$userId", MODE_PRIVATE)
+        isLiked = favoritesPrefs.getBoolean(recipe.id.toString(), false)
+        updateLikeButtonState()
+
+        binding.fabLike.setOnClickListener {
+            if (isLiked) {
+                favoritesPrefs.edit().remove(recipe.id.toString()).apply()
+                isLiked = false
+                Toast.makeText(
+                    this@RecipeDetailActivity,
+                    "Removed from favorites",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                favoritesPrefs.edit().putBoolean(recipe.id.toString(), true).apply()
+                val recipesPrefs = getSharedPreferences("recipes_data_$userId", MODE_PRIVATE)
+                recipesPrefs.edit().putString(recipe.id.toString(), Gson().toJson(recipe)).apply()
+                isLiked = true
+                Toast.makeText(
+                    this@RecipeDetailActivity,
+                    "Added to favorites",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            updateLikeButtonState()
+        }
+    }
     private fun updateLikeButtonState() {
         val iconResource = if (isLiked) {
             R.drawable.ic_favorite

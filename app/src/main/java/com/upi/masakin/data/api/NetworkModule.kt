@@ -4,6 +4,7 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.google.firebase.auth.FirebaseAuth
 import com.upi.masakin.data.api.auth.FakeStoreApi
+import com.upi.masakin.data.api.auth.FakeStoreSessionManager
 import com.upi.masakin.data.api.recipe.MealApiService
 import dagger.Module
 import dagger.Provides
@@ -54,5 +55,15 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(FakeStoreApi::class.java)
+    }
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object AppModule {
+        @Provides
+        @Singleton
+        fun provideFakeStoreSessionManager(@ApplicationContext context: Context): FakeStoreSessionManager {
+            return FakeStoreSessionManager(context)
+        }
     }
 }
